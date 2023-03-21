@@ -1,0 +1,94 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   Modem.PRM                                                   *
+ *                                                                          *
+ * MODULE NAME: MODEM                                                       *
+ *                                                                          *
+ * PROGRAMMER:  Avishai                                                     *
+ *                                                                          *
+ * DESCRIPTION: modem parameters                                            *
+ *                                                                          *
+ * REVISION:    01.01 14/06/94                                              *
+ *                                                                          *
+ * HISTORY:     none                                                        *
+ *                                                                          *
+ ****************************************************************************/
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+          /*=============================================================*
+           *               I N T R O D U C T I O N                       *
+           *=============================================================*/
+
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+#ifndef __MODEM_PRM
+#define __MODEM_PRM
+
+
+          /*=============================================================*
+           *                 D E F I N I T I O N S                       *
+           *=============================================================*/
+
+#define MODEM_PARAM "MODEM "
+
+          /*=============================================================*
+           *       T Y P E  &  S T R U C T    D E C L A R A T I O N      *
+           *=============================================================*/
+#ifndef CENTER_MMI
+
+typedef  struct
+{
+   usint dt_timeout;
+       /* default: 5000. dial tone timeout [mSec]. */
+
+   usint dt_time;
+       /* default: 150.   how much time [mSec] dial tone must exist */
+
+   usint answer_tone_time;
+       /* default: 3300.  answer tone is activated for this time. */
+
+   usint
+      busy_high_min,   /*  200 mSec */
+      busy_high_max,   /* 1100 mSec */
+      busy_low_min,    /*  200 mSec */
+      busy_low_max,    /* 1100 mSec */
+      ring_high_min,   /*  500 mSec */
+      ring_high_max,   /* 2500 mSec */
+      ring_low_min,    /* 2500 mSec */
+      ring_low_max;    /* 6500 mSec */
+
+   byte high_level;
+       /* default: 2.  number of samples required to determine dial tone  */
+       /* 'high' level.                                                   */
+
+   byte n_of_cyc;
+       /* default: 3.  number of busy cycles to start busy detection      */
+
+   byte busy_cycles;
+       /* default: 4.  number of busy cycles for busy detection           */
+
+   usint                     /* pulse dialing parameters  */
+      dpi, /* default:  40.  time between pulses [mSec].                  */
+      dpw, /* default:  60.  pulse width         [mSec].                  */
+      tbd, /* default: 800.  time between digits [mSec].                  */
+      dtmf_off_time, /* default: 100.  time between digits [mSec]         */
+      dtmf_on_time;  /* default: 100.  time of each digit  [mSec]         */
+
+   usint                     /* carrier loss parameters  */
+      carrier_loss_alarm_time,
+      carrier_loss_dissconnect_time;
+
+} ModemParamType;
+
+#endif
+
+
+#endif
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

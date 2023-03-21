@@ -1,0 +1,5 @@
+NOTE:
+=====
+a few versions-parallel to VER_A folder can be created!
+meant for version control
+

@@ -1,0 +1,170 @@
+/***************************************************************************
+ *                                                                         *
+ * FILE NAME:   keysldr.def                                                *
+ *                                                                         *
+ * MODULE NAME: Keys Loader                                                *
+ *                                                                         *
+ * PROGRAMMER:  Rami Rosenbaum.                                            *
+ *                                                                         *
+ * DESCRIPTION: Load Keys to KeyDB database and erase keys from it.        *
+ *              Module is in charge of the BlockCom protocol interface,    *
+ *              and the aplication interface. See KeysLdr.doc & SecKb.doc. *
+ *                                                                         *
+ * REVISION:    01_00                                                      *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef _KEYS_LOADER_DEF_
+#define _KEYS_LOADER_DEF_
+
+                /* ======================================= *
+                 *          D E F I N I T I O N S          *
+                 * ======================================= */
+
+#define APPL_NAME_SIZE                   8
+#define KEYSLDR_PIN_PAD_ID_SIZE         15
+#define KEYSLDR_KEY_CONTROL_VALUE_LEN    3
+
+
+                /* ======================================= *
+                 *     T Y P E   D E C L A R A T I O N     *
+                 * ======================================= */
+
+/* Module return values: */
+packed enum
+{
+   /* General return values */
+   KEYSLDR_OK                       =   0,
+   KEYSLDR_ERROR                    =  -1,
+   KEYSLDR_FATAL_ERROR              =  -2,     /* Fatal error. */
+   KEYSLDR_NULL_ASSIGNMENT          =  -3,     /* NULL given as pointer. */
+   KEYSLDR_PARAM_ERROR              =  -4,     /* Error in a Parameter. */
+
+   /* Specific Operations */
+   KEYSLDR_NOT_SUPPORTED            = -20,     /* Operation Not Supported. */
+   KEYSLDR_WRONG_KEY_CONTROL_VALUE  = -21,     /* Wrong Key Control Value. */
+   KEYSLDR_KEY_ALL_ZERO             = -22,     /* Key data is all zeroes. */
+
+   /* Key DB management */
+   KEYSLDR_KEYDB_NOT_EXIST          = -40,     /* Key DB does not exist !!! */
+   KEYSLDR_KEYDB_TYPE_ERROR         = -41,     /* Key-Block Type mismatch. */
+   KEYSLDR_KEYDB_SIGNATURE_ERROR    = -42,     /* Key-Block Signature is incorrect. */
+   KEYSLDR_KEYDB_CS_ERROR           = -43,     /* Key-Block Check-Sum Error. */
+   KEYSLDR_KEYDB_TOO_SMALL          = -44,     /* Given buffer too small for Block. */
+   KEYSLDR_KEYDB_DB_FULL            = -45,     /* Not enough space in DB. */
+   KEYSLDR_KEYDB_FOUND              = -46,     /* Specified Key-Block found in DB. */
+   KEYSLDR_KEYDB_NOT_FOUND          = -47,     /* Specified Key-Block not found in DB. */
+   KEYSLDR_KEYDB_WRITE_ERROR        = -48,     /* Error in writing Key-Block. */
+   KEYSLDR_KEYDB_ERASE_ERROR        = -49,     /* Error in erasing Key-Block. */
+   KEYSLDR_KEYDB_INVALID_PASSWORD   = -50,     /* Invalid Key Password provided by user. */
+   KEYSLDR_KEYDB_LOCKED_PASSWORD    = -51,     /* Key Password entry attempt is locked. */
+   KEYSLDR_KEYDB_DATA_LEN_MISMATCH  = -52,     /* The Key Data Length does not fit the Key Type. */
+
+   /* Security and Transport Keys */
+   KEYSLDR_SECURITY_MISMATCH        = -60,     /* Problem with Transport Key or KTK mode. */
+   KEYSLDR_INVALID_TRANSPORT_KEY    = -61      /* Transport Key is not valid for this key. */
+};
+
+
+/* Specific Operations to be used. */
+packed enum
+{
+    KEYSLDR_NO_OP               = 0,    /* No specific operation to perform. */
+    KEYSLDR_CHECK_CONTROL_VALUE,        /* Check the Key Control Value, before write it in DB. */
+    KEYSLDR_CHECK_ALL_ZERO,             /* Check if key data is all '0'. */
+    KEYSLDR_DO_TK_CALCULATION,          /* Perform TK calculation before decrypt the key to be loaded. */
+    KEYSLDR_DO_KEY_CALCULATION,         /* Perform key calculation (after been decrypted) before write it in DB. */
+    KEYSLDR_CALC_GLOBAL_CONTROL_VALUE,  /* Calculate the Global Key(s) Control Value. */
+    KEYSLDR_REPLACE_KEY,                /* Replace the existing data key in DB with new data. */
+    KEYSLDR_DOUBLE_DECRYPT              /* Decrypt key: 1st time with TK 1 and 2nd time with TK 2. */
+};
+
+
+/* Transport Key or Key calculation algorithms. */
+packed enum
+{
+    KEYSLDR_NO_KEY_CALC     = 0,
+    KEYSLDR_KEY_CALC_XOR,
+    KEYSLDR_KEY_CALC_DES,
+    KEYSLDR_KEY_CALC_3DES,
+    KEYSLDR_KEY_CALC_UNDES,
+    KEYSLDR_KEY_CALC_3UNDES
+};
+
+
+/* Specific supported Standards. */
+typedef packed enum
+{
+    KEYSLDR_NO_SPECIFIC_STD = 0,
+    KEYSLDR_STD_SERMEPA,
+    KEYSLDR_STD_BANESTO,
+    KEYSLDR_STD_SPAIN_4B
+} E_KeysLdr_Std;
+
+/* SERMEPA specific operations parameters structure. */
+typedef packed struct
+{
+    E_KeysLdr_Std   Std;                /* Standard == KEYSLDR_STD_SERMEPA */
+    byte           *pKeyControlValueIn; /* Expected Key Control Value */
+} S_KeysLdr_SermepaOpParams;
+
+/* BANESTO specific operations parameters structure. */
+typedef packed struct
+{
+    E_KeysLdr_Std   Std;                /* Standard == KEYSLDR_STD_BANESTO */
+    byte           *pKeyControlValueIn; /* Expected Key Control Value */
+    byte           *pTKName1;           /* Transport Key component */
+    byte           *pTKCalcAlgo;        /* Pointer to array of Operations to perform for TK calculation */
+    byte           *pTKCalcData;        /* Transport Key calculation data */
+    byte           *pKeyName1;          /* Key component */
+    byte           *pKeyCalcAlgo;       /* Pointer to array of Operations to perform for Key calculation */
+    byte           *pKeyCalcData;       /* Key calculation data */
+} S_KeysLdr_BanestoOpParams;            
+
+/* 4B specific parameters structure */
+typedef packed struct
+{
+    E_KeysLdr_Std   Std;                /* Standard == KEYSLDR_STD_SPAIN_4B */
+    byte           *pKeyControlValueIn; /* Expected Key Control Value */
+    byte           *pTKName1;           /* First Transport Key component */
+    byte           *pTKCalcAlgo1;       /* Pointer to array of Operations to perform for 1st TK calculation */
+    byte           *pTKCalcData1;       /* First Transport Key calculation data */
+    byte           *pTKName2;           /* Second Transport Key component */
+    byte           *pKeyName1;          /* Key component */
+    byte           *pKeyCalcAlgo;       /* Pointer to array of Operations to perform for Key calculation */
+    byte           *pKeyCalcData;       /* Key calculation data */
+} S_KeysLdr_Spain4BOpParams;
+
+
+/* Union of all Standards specific operations parameters. */
+typedef packed union
+{
+    S_KeysLdr_SermepaOpParams   SermepaOpPrms;
+    S_KeysLdr_BanestoOpParams   BanestoOpPrms;
+    S_KeysLdr_Spain4BOpParams   Spain4BOpPrms;
+} U_KeysLdr_StdOpPrms;
+
+
+
+/* Structure for Application, for writing Key-Blocks to KeyDB. */
+typedef packed struct
+{
+    usint       StructSize;                     /* Size of this structure. */
+    byte        KeyName[ APPL_NAME_SIZE ];      /* Name - identifier of the key. */
+    lipver      Version;                        /* Block Version. */
+    byte        Spare[2];                       /* Spare. */
+} S_KeysLdrApplKeyHdr; /* 2+8+4+2 = 16 */
+
+/* Structure for Keys loaded with Operations. */
+typedef packed struct
+{
+    S_KeysLdrApplKeyHdr *pApplKeyHdr;       /* As defined above, to load Key Block into DB. */
+    byte                *pTKName;           /* Name of the Transport Key to load with. */
+    byte                *pKeyData;          /* Key-Data structure as in encryptr.def file. */
+    usint                KeyDataLen;        /* Sizeof of the Key-Data structure. */
+    byte                *pOpType;           /* Pointer to array of Operations to perform during Key loading. */
+    U_KeysLdr_StdOpPrms *pOpParams;         /* Specific Standard parameters for operations to perform. */
+} S_KeysLdr_WithOp;
+
+
+#endif

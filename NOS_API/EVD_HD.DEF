@@ -1,0 +1,148 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   EVD_HDR.DEF                                                 *
+ *                                                                          *
+ * MODULE NAME: MULTIAPP                                                    *
+ *                                                                          *
+ * PROGRAMMER:  Oren Sokoler                                                *
+ *                                                                          *
+ * DESCRIPTION: Event driven application specific header header             *
+ *                                                                          *
+ * REVISION:    01.00 14/02/01                                              *
+ *                                                                          *
+ ****************************************************************************/
+
+#ifndef __EVD_HDR_DEF_
+#define __EVD_HDR_DEF_
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+
+    /* This file defines the EvD application specific header */
+    /* This header should be placed at the start of the      */
+    /* applciation block (offset 0)                          */
+    /*                                                       */
+          /*==========================================*
+           *             I N C L U D E S              *
+           *==========================================*/
+
+#include multiapp_def
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+#define          MULTIAPP_HEADER_SIGNATURE_SIZE    8
+#define          MULTIAPP_HEADER_DESC_SIZE        16
+#define          MULTIAPP_HEADER_APPL_VER_SIZE     8
+#define          MULTIAPP_HEADER_NOS_VER_SIZE      5
+#define          MULTIAPP_HEADER_NAME_SIZE         8
+#define          MULTIAPP_HEADER_DATE_SIZE         8
+#define          MULTIAPP_HEADER_MENU_SIZE        15
+#define          MULTIAPP_NUM_OF_MENUS            10
+
+#define          MULTIAPP_ARM_SIGNATURE                "LipEvDA"
+#define          MULTIAPP_68_SIGNATURE                 "68LipEvD"
+
+#ifdef _ARM
+  #define          MULTIAPP_SIGNATURE                MULTIAPP_ARM_SIGNATURE
+#else
+  #define          MULTIAPP_SIGNATURE                MULTIAPP_68_SIGNATURE
+#endif
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+               /* EvD application header Part 1 */
+    /* This part of the header is used by the application    */
+    /* integrator                                            */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * NOTE : The size of this structure must be a multiply of 4 bytes !!!!  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#ifdef __WIN32__
+#pragma option -a1   /*set byte alignement*/
+#endif
+
+typedef packed struct {
+                                                                                                                                                /* Size */
+           char    signature[MULTIAPP_HEADER_SIGNATURE_SIZE];   /* Signature of an EvD application.                                         */  /*   8  */
+          usint    size_of_struct;                              /* Size of specific header ( sizeof(EvDHDRType) + sizeof(EvDTRLType) )      */  /*   2  */
+          ulint    size_of_appl_statics;                        /* Size of application static data.                                         */  /*   4  */
+           char    nos_ver[MULTIAPP_HEADER_NOS_VER_SIZE];       /* Minimum NOS version to run this application.                             */  /*   5  */
+           char    appl_desc[MULTIAPP_HEADER_DESC_SIZE];        /* NUL terminated description of the application.                           */  /*  16  */
+           char    appl_ver[MULTIAPP_HEADER_APPL_VER_SIZE];     /* Application version in the form : XX.YY.ZZ.                              */  /*   8  */
+           char    appl_name[MULTIAPP_HEADER_NAME_SIZE];        /* Name of application.                                                     */  /*   8  */
+           char    date[MULTIAPP_HEADER_DATE_SIZE];             /* Application creation date in the form : DD/MM/YY.                        */  /*   8  */
+           byte    industry_types;                              /* Bitwise OR of supported industry types.                                  */  /*   1  */
+           byte    protocol_type;
+           byte    baselink;                                    /* Base Link Address                                                        */  /*   1  */
+           byte    spare3;                                      /* Spare byte.                                                              */  /*   1  */
+           byte    spare4;                                      /* Spare byte.                                                              */  /*   1  */
+           char    default_menu_str[MULTIAPP_HEADER_MENU_SIZE]; /* NUL terminated Default string to appear in menus.                        */  /*  15  */
+           byte    num_of_dlms;                                 /* Number of used DLMs by this application.                                 */  /*   1  */
+           void   *icon_ptr;                                    /* Pointer to an icon that represents this application in a GUI environment.*/  /*   4  */
+   DLMEntryData   *dlm_array_ptr;                               /* Pointer to DLMs array where the DLMs name and version are stored.        */  /*   4  */
+
+                                                                                                                                   /* Total size  : 88  */
+
+} EvDHDRType;
+
+
+               /* EvD application header Part 2 */
+    /* This header part is used by the NOS event and multi   */
+    /* application manager to dispatch events to the         */
+    /* application                                           */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * NOTE : The size of this structure must be a multiply of 4 bytes !!!!  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+typedef packed struct {
+                                                                                                                 /* Size */
+  MenuEntryType    menu_array[MULTIAPP_NUM_OF_MENUS]; /* Menus that this application participates in.        */  /*  100  */
+           void  (*init_func_ptr)(void);              /* Pointer to EvD application initialization function. */  /*   4  */
+           void  (*scan_func_ptr)(void);              /* Pointer to EvD application scan function.           */  /*   4  */
+     evdFuncTbl    card_rdr_event;                    /* Card reader event function table.                   */  /*   8  */
+     evdFuncTbl    smart_rdr_event;                   /* Smart Card event function table.                    */  /*   8  */
+     evdFuncTbl    check_rdr_event;                   /* Check reader event function table.                  */  /*   8  */
+     evdFuncTbl    barcode_rdr_event;                 /* Bar code reader event function table.               */  /*   8  */
+     evdFuncTbl    hot_key_event;                     /* Hot key event function table.                       */  /*   8  */
+     evdFuncTbl    comm_event;                        /* Communication event function table.                 */  /*   8  */
+     evdFuncTbl    timer_event;                       /* Timer event function table.                         */  /*   8  */
+     evdFuncTbl    appl_event;                        /* InterApplication event.                             */  /*   8  */
+           void  (*redraw_func_ptr)(boolean);         /* Redraw event.                                       */  /*   4  */
+           void  (*appl_func_ptr)( void *, ulint );   /* Function call event.                                */  /*   4  */
+           ulint (*Select_func_ptr)( void *pVal, ulint ulVal );   /* User Interface Select func ('Run executable').      */  /*   4  */
+           void   *Spare1;										         /*   4  */	
+     evdFuncTbl    smart_rdr_syn_event;               /* Smart reader event that does not answer to reset.   */  /*   8  */
+           byte    Spare[8];                          /* Spare bytes                                         */  /*   8  */
+                                                                                                   /* Total size  : 196  */
+
+} EvDHDR2Type;
+
+#define  EvDTRLType  EvDHDR2Type    /* for NOS writer */
+
+
+    /* This structure combines the header Part 1 and the header      */
+    /* Part 2 for one definition to be used by the application       */
+    /* writer                                                        */
+
+typedef packed struct {
+
+  EvDHDRType  HDR;      /* Specific header Part 1 */
+  EvDHDR2Type TRL;      /* Specific header Part 2 */
+
+} EvDHeaderType;
+
+
+#ifdef __WIN32__
+#pragma option -a.   /*set byte alignement*/
+#endif
+
+
+#endif /* __EVD_HDR_DEF_ */

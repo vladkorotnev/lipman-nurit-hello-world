@@ -1,0 +1,93 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   GRPHDISP.DEF                                                *
+ *                                                                          *
+ * MODULE NAME: Grphdisp                                                    *
+ *                                                                          *
+ * PROGRAMMER:  Rami Rosenbaum                                              *
+ *                                                                          *
+ * DESCRIPTION: #define, structure & typedef declarations for module.       *
+ *                                                                          *
+ ****************************************************************************/
+#ifndef _GRPHDISP_DEF_
+  #define _GRPHDISP_DEF_
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+
+
+
+          /*==========================================*
+           *             I N C L U D E S              *
+           *==========================================*/
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+/*
+ * Function return values
+ * 
+ * for all Graphics modules
+ */
+#define GRAPHICS_OK                  0
+#define GRAPHICS_ERR                -1
+#define GRAPHICS_FATAL_ERR          -2
+#define GRAPHICS_INVALID_FORMAT     -3             /* Format not supported */
+#define GRAPHICS_ARG_ERR            -4             /* Function/Structure argument error */
+
+
+/* Constants for the RawBitmap_T.Type field: */
+#define NOS_FILE_TYPE_RAW_BITMAP  0x5242  /* "RB" - Raw Bitmap */ 
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+#if (defined(COLOR_DISPLAY) || defined(_ARM)|| defined(_Windows))
+
+   typedef struct
+   {
+     usint x1;
+     usint y1;
+     usint x2;
+     usint y2;
+   } Rectangle;
+
+#else /*#ifdef COLOR_DISPLAY*/
+
+   typedef struct
+   {
+     byte x1;
+     byte y1;
+     byte x2;
+     byte y2;
+   } Rectangle;
+
+#endif /*#ifdef COLOR_DISPLAY*/
+
+
+/*
+ * NOS Raw Bitmap structure:
+ *
+ * defines a Raw Bitmap Image, Image-data starting from the Top-Left corner.
+ */
+typedef packed struct
+{
+   usint       Size;                   /* Size of struct */
+   usint       Type;                   /* Type of file: NOS_FILE_TYPE_RAW_BITMAP, ... */
+   ulint       Width;                  /* Width of image - in Pixels */
+   ulint       Height;                 /* Height of image - in Pixels  */
+   ulint       ImageSizeInByte;        /* Size of image data - in Bytes */
+   byte const *pImage;                 /* Pointer to Image */
+   long        Transparent;            /* Only when needed!!! Color to be transparent (not to be drawn) - for speed, put TRANSPARENT_NOT_USED */
+   byte        ColorDepth;             /* 1/4 /8 BPP supported */
+   byte        Spare1[3];              /* Spare - for future use. MUST BE RESET TO 0 !!! */
+   byte        Spare2[4];              /* Spare - for future use. MUST BE RESET TO 0 !!! */
+} RawBitmap_T; /* 2+2+4+4+4+4+4+1+3+4 = 28 bytes */
+
+
+/* _GRPHDISP_DEF_ */
+#endif

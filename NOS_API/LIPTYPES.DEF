@@ -1,0 +1,131 @@
+
+/***************************************************************************
+ * FILE   NAME: LIPTYPES.H
+ * MODULE NAME: STANDARD
+ * DESCRIPTION: This file defines standard types in LIPMAN
+ * REVISION   : 1.0
+ ***************************************************************************/
+
+#ifndef __LIPTYPES_H
+#define __LIPTYPES_H
+
+    /*============================================*
+     *   T Y P E S      D E F I N I T I O N S     *
+     *============================================*/
+#ifndef _ARM
+  #define PACKED_ARM 	/**/
+#else
+  #define PACKED_ARM 	_Packed 	/* Only for ARM Compiler */
+#endif
+
+/* Memory types for __C51__ uVision2 compiler */
+#ifdef __C51__
+   #define packed
+   #define PACKED
+   #define           CODE_C51    code
+   #define           DATA_C51    data
+   #define          BDATA_C51   bdata
+   #define          IDATA_C51   idata
+   #define          PDATA_C51   pdata
+   #define          XDATA_C51   xdata
+   #define          SMALL_C51   small
+   #define          COMPACT_C51 compact
+   #define          LARGE_C51   large
+   #define          REENTRANT_C51 reentrant
+#else
+   #define           CODE_C51
+   #define           DATA_C51
+   #define          BDATA_C51
+   #define          IDATA_C51
+   #define          PDATA_C51
+   #define          XDATA_C51
+   #define          SMALL_C51
+   #define          COMPACT_C51
+   #define          LARGE_C51
+   #define          REENTRANT_C51
+#endif /* __C51__ */
+
+#ifdef __BORLANDC__
+ #define packed 	/* Only for 68000 Compiler */
+ #define PACKED 	/**/
+#endif
+
+
+typedef unsigned char 		BYTE;
+#ifdef _HC11
+typedef signed   int 		SINT;
+typedef unsigned int 		USINT;
+#else
+typedef signed   short 		SINT;
+typedef unsigned short 		USINT;
+#endif
+#ifndef _ARM
+  typedef signed   long  	LINT;
+  typedef unsigned long  	ULINT;
+#else
+  typedef int        		LINT;
+  typedef unsigned int  	ULINT;
+#endif
+typedef USINT			WORD;
+
+typedef BYTE			byte;
+typedef BYTE			uchar;
+typedef SINT			sint;
+typedef USINT			usint;
+typedef LINT			lint;
+typedef ULINT			ulint;
+
+typedef signed char 		sbyte;
+typedef BYTE			boolean;
+typedef BYTE			BOOLEAN;
+
+#ifdef FALSE
+#undef FALSE
+#endif
+#ifdef TRUE
+#undef TRUE
+#endif
+
+#define FALSE		(SINT)0
+#define TRUE		(SINT)1
+
+struct mydate {
+	SINT da_year;
+	char da_day;
+	char da_mon;
+};
+
+
+struct mytime {
+	BYTE ti_min;      /* minutes */
+	BYTE ti_hour;     /* hours */
+	BYTE ti_hund;     /* hundredths of seconds */
+	BYTE ti_sec;      /* seconds */
+};
+
+typedef struct mydate		DATET;
+typedef struct mytime		TIMET;
+
+typedef packed struct
+{
+  byte Major;
+  byte Minor;
+  byte Debug;
+  byte Beta;
+
+} lipver;
+
+typedef packed struct
+{
+  byte Major;
+  byte Beta;
+} LipShortVerStr;
+
+typedef packed struct
+{
+  byte Major;
+  byte Minor;
+} LipMinVerStr;
+
+#endif
+

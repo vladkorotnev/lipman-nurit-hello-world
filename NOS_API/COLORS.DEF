@@ -1,0 +1,68 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   COLORS.DEF                                                  *
+ *                                                                          *
+ * MODULE NAME:                                                             *
+ *                                                                          *
+ * PROGRAMMER:  Rami Rosenbaum                                              *
+ *                                                                          *
+ * DESCRIPTION: Windows .BMP Image file format:                             *
+ *              #define, structure & typedef declarations                   *
+ *                                                                          *
+ ****************************************************************************/
+#ifndef _COLORS_DEF_
+  #define _COLORS_DEF_
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+/**** 16 first colors in the 16/256 Color palettes (moved from GrphText.def): ****/
+#define  BLACK                    0  /* 0000 0000 */
+#define  BLUE                     1  /* 0000 0001 */
+#define  GREEN                    2  /* 0000 0010 */
+#define  CYAN                     3  /* 0000 0011 */
+#define  RED                      4  /* 0000 0100 */
+#define  MAGENTA                  5  /* 0000 0101 */
+#define  BROWN                    6  /* 0000 0110 */
+#define  LIGHTGRAY                7  /* 0000 0111 */
+#define  DARKGRAY                 8  /* 0000 1000 */
+#define  LIGHTBLUE                9  /* 0000 1001 */
+#define  LIGHTGREEN              10  /* 0000 1010 */
+#define  LIGHTCYAN               11  /* 0000 1011 */
+#define  LIGHTRED                12  /* 0000 1100 */
+#define  LIGHTMAGENTA            13  /* 0000 1101 */
+#define  YELLOW                  14  /* 0000 1110 */
+#define  WHITE                   15  /* 0000 1111 */
+#define  TRANSPARENT_NOT_USED    0xFFFFFFFFL /* previous color will not be affected */
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+/**** NOS Palette entry structure ****/
+typedef struct
+{
+        byte    Red;
+        byte    Green;
+        byte    Blue;
+} PaletteRGB_T;
+
+
+/**** BMP-format Palette entry structure (RGBQUAD, defined in <wingdi.h> under Windows) ****/
+typedef struct
+{
+        byte    Blue;
+        byte    Green;
+        byte    Red;
+        byte    Reserved;
+} PaletteBGRQuad_T;
+
+
+/* _COLORS_DEF_ */
+#endif

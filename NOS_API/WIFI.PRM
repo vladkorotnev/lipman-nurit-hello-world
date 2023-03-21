@@ -1,0 +1,96 @@
+/************************************************
+ * FILE NAME:   WIFI.PRM
+ * MODULE NAME: WIFI (DPAC)
+ * PROGRAMMER:  Oren Sokoler
+ * DESCRIPTION: WiFi radio modem parameters
+ * REVISION:    25/05/2000
+ ************************************************/
+
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+   /*=======================================*
+    *   I N T R O D U C T I O N             *
+    *=======================================*/
+
+#include liptypes_def
+
+#ifndef __WIFI_PRM
+#define __WIFI_PRM
+
+
+   /*=======================================*
+    *   D E F I N I T I O N S               *
+    *=======================================*/
+
+#define         WIFI_RADIO_PARAM          "WIFIPR"
+
+#define         WIFI_MAX_SSID_LEN         16       /* SSID / APN length  */
+#define         WIFI_MAX_WEP_KEYS         4        /* Supported WEP keys */
+#define         WIFI_WEP_KEY_LEN          13       /* Key length         */
+
+#define         WIFI_UNUSED_FIELD         0xFF     /* Unsed field in the configure */
+                                                   /* structure must be            */
+                                                   /* initialized with this value  */
+
+   /* ======================================*
+    *    T Y P E	D E C L A R A T I O N	    *
+    * ======================================*/
+
+/* WLAN Network type */
+
+#define         WIFI_ACCESS_POINT         0        /* Infrastructure (default) */
+#define         WIFI_PEER_TO_PEER         1        /* Ad-Hoc                   */
+
+/* WLAN Security */
+
+#define         WIFI_NO_SECURITY          0        /* Security disabled (default) */
+#define         WIFI_64_BIT_SECURITY      64       /* 64bit DES key               */
+#define         WIFI_128_BIT_SECURITY     128      /* 128bit 3DES key             */
+
+/* WEP Authentication */
+
+#define         WIFI_NO_WEP_AUTH              0    /* No authentication (default) */
+#define         WIFI_OPEN_KEY_AUTH            1    /* Open Key algorithm          */
+#define         WIFI_SHARED_KEY_AUTH          2    /* Shared Key algorithm        */
+#define         WIFI_OPEN_OR_SHARED_KEY_AUTH  3    /* AP Selects auth             */
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ * There is one block of the following struct  *
+ * * * * * * * * * * * * * * * * * * * * * * * */
+
+typedef packed struct {     
+
+          byte NetworkType;                     /* Network type: Access point           */
+                                                /*               or Peer-to-peer        */
+                                               
+          char ApSSID[ WIFI_MAX_SSID_LEN + 1 ]; /* APN : Only in Infrastructure mode    */
+                                                /*       NUL = any                      */
+                                               
+          byte ChannelID;                       /* Channel ID: Only in Peer-To-Peer     */
+                                                /*             mode.                    */
+                                               
+       boolean DisableUdap;                     /* UDAP Discovery disable               */
+                                                /* (default: enable)                    */
+                                               
+          byte SecurityType;                    /* Disabled (default), 64bit or 128bit  */
+                                               
+          byte AuthType;                        /* WEP Authentication: None, Open Key,  */
+                                                /*                     Shared Key, Both */
+                                                
+          byte WepKey[ WIFI_MAX_WEP_KEYS ]      /* Optional 4 keys, 40 - 104bits        */
+                     [ WIFI_WEP_KEY_LEN ]; 
+                     
+          byte DefaultKey;                      /* Default key index to be used 0,1,2   */
+                                                /*                              or 3    */
+                     
+          byte Reserved [ 32 ];
+
+} WiFiRadioParamStruct;
+
+#endif
+
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

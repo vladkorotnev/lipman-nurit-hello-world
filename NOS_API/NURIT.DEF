@@ -1,0 +1,421 @@
+	  /*==========================================*
+	   *      T Y P E   D E C L A R A T I O N     *
+	   *==========================================*/
+
+#ifndef __NURIT_DEF
+#define __NURIT_DEF
+
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+typedef unsigned short int 	handle;
+
+typedef struct
+{
+   usint    baud_rate;    /* baud rate in bit per sec. */
+   byte     numbits;      /* bits number in byte */
+   char     parity;       /* parity mode: 'n', 'o' or 'e'  */
+
+   boolean  rts_cts;      /*  FALSE - RTS is user controled by
+										        Uart_RtsClear and  Uart_RtsSet.
+			                     TRUE  - RTS is automatically controled
+                                      by the MC68681.
+		                        RTS_RADIO - RTS will be hign when the UART is
+                                      ready to receive data  */
+
+   boolean  dtr_mode;     /* FALSE - DTR is user controled by Uart_DtrClear
+                                     and Uart_DtrSet.
+			                    TRUE  - DTR will be hign when UART is ready to
+		                               receive data */
+}comm_param;
+
+typedef struct
+{
+   ulint    baud_rate;    /* baud rate in bit per sec. */
+   byte     numbits;      /* bits number in byte */
+   char     parity;       /* parity mode: 'n', 'o' or 'e'  */
+
+   boolean  rts_cts;      /*  FALSE - RTS is user controled by
+										        Uart_RtsClear and  Uart_RtsSet.
+			                     TRUE  - RTS is automatically controled
+                                      by the MC68681.
+		                        RTS_RADIO - RTS will be hign when the UART is
+                                      ready to receive data  */
+
+   boolean  dtr_mode;     /* FALSE - DTR is user controled by Uart_DtrClear
+                                     and Uart_DtrSet.
+			                    TRUE  - DTR will be hign when UART is ready to
+		                               receive data */
+}CommParam;
+
+
+	  /*==========================================*
+	   *           D E F I N I T I O N S          *
+	   *==========================================*/
+
+#ifdef _Windows
+  #define INTERRUPT	void
+#elif defined(BORLANDC)
+  #define INTERRUPT	static void interrupt
+#else
+  #define INTERRUPT	interrupt void
+#endif
+
+#if !defined(_ARM) && !defined(__C51__)
+ #define NULL                 0
+#else
+ #include <stdlib.h>
+#endif
+#define ON                   1
+#define OFF                  0
+#define PASS                 1
+#define FAIL                 0
+#define OK                   1
+#define WARNING             -1
+#define FAILURE             -2
+
+#ifndef  countof
+  #define countof(arr)  (sizeof(arr)/sizeof(arr[0]))
+#endif
+#ifndef _min
+  #define _min(A,B) (((A)>(B))?(B):(A))
+#endif
+#ifndef _max
+  #define _max(A,B) (((A)<(B))?(B):(A))
+#endif
+
+#define  RTS_RADIO  2       /* RTS automatic mode (ready to receive )*/
+#define  RTS_CTS_MODEM  3   /* RTS-ready to receive, CTS-transmit enable) */
+#define  RTS_DTR_STORE  4   /* manuel with pre status store */
+#define  RTS_DTR_INIT   5   /* manuel with full init of channel */
+#define DLMAPIENTRY  /* Used for Defining Dlm enrty function for the pre-processor */
+/* language */
+
+#define HEBREW               0
+#define ENGLISH              1
+#define USA                  1
+#define HUNGARY              2
+#define HUNGARIAN            2
+#define TURKISH              3
+#define RUSSIAN              4
+#define LATVIAN              5
+#define ESTONIYA             6
+#define ESTONIAN             6
+#define SPANISH              7
+#define POLISH               8
+#define GREEK                9
+#define FRENCH               10
+#define VIETNAM 			 11
+#define VIETNAMESE			 VIETNAM
+#define PORTUGUS 			 12
+#define PORTUGUESE 			 PORTUGUS
+#define TRADITIONAL_CHINESE  13
+#define CHINESET             TRADITIONAL_CHINESE
+#define	THAI				 14	  
+#define MALAYSIAN			 15
+#define MALAYSIA			 MALAYSIAN
+#define INDONESIAN		     16
+#define INDONESN		     INDONESIAN
+#define PHILIPPINES			 17
+#define PHILIPPN			 PHILIPPINES
+#define JAPANESE			 18	 
+#define KOREAN				 19
+#define CHINESE              20
+#define TAMIL				 21
+#define HINDU				 22		
+#define PUNJABI				 23	
+#define ITALIAN			         24	
+#define ARABIC               30
+#define IBM_850                          80
+
+
+/* date format (American, European Or Hungarian/Japanese) */
+
+#define MONTH_DAY_YEAR  0
+#define DAY_MONTH_YEAR  1
+#define YEAR_MONTH_DAY  2
+
+/*----  standard ascii control characters  ----*/
+
+#define SOH  0x01
+#define STX  0x02
+#define ETX  0x03
+#define EOT  0x04
+#define ENQ  0x05
+#define ACK  0x06
+#define BEL  0x07
+#define LF   0x0A
+#define CR   0x0D
+#define NAK  0x15
+#define ETB  0x17
+#define ESC  0x1B
+#define FS   0x1C
+
+/*----  standard kb value  ----*/
+#ifndef APPLKB_DEFINED
+
+#define CE          'A'
+#define LINE_FEED   'A'
+#define ON_STBY     'O'
+#define RADIO_LINE  'R'
+#define UPDATE      'T'
+#define PAPER_FEED_KEY_ASCII 'E'
+
+
+/*********************************************/
+/*Return value for single key*/
+#define ENTER       0x0D
+#define CLEAR       'A'
+#define MENU        'T'
+#define BKSP        'D'
+#define UP_ARROW    'B'
+#define DOWN_ARROW  'X'
+#define LEFT_ARROW  'C'
+#define RIGHT_ARROW 'F'
+#define INSERT      'S'
+#define ALPHA       '*'
+#define ALTERNATIVE 'R'
+#define POINT       '.'
+#define FUNC_KEY_NURIT_3000     140
+#define CONTROL_KEY_2055        140
+
+/*----------- APPLICATION DEFINED KEY -----------*/
+#define F1_KEY      120
+#define F2_KEY      121
+#define F3_KEY      122
+#define F4_KEY      123
+#define F5_KEY      124
+#define F6_KEY      125
+#define F7_KEY      126
+#define F8_KEY      127
+#define F9_KEY      128
+#define F10_KEY      150
+#define F11_KEY      151
+#define F12_KEY      152
+#define F13_KEY      153
+#define F14_KEY      154
+#define F15_KEY      155
+#define F16_KEY      156
+#define F17_KEY      157
+#define F18_KEY      158
+#define F19_KEY      159
+#define F20_KEY      160
+/*********************************************/
+/*Return value for combination*/
+  /* DUBLE KEYS: CNTRL+KEY */
+#define CNT_F1_KEY      171
+#define CNT_F2_KEY      172
+#define CNT_F3_KEY      173
+#define CNT_F4_KEY      174
+#define CNT_F5_KEY      175
+#define CNT_F6_KEY      176
+#define CNT_F7_KEY      177
+#define CNT_F8_KEY      178
+#define CNT_F9_KEY      179
+#define CNT_F10_KEY     180
+#define CNT_F11_KEY     181
+#define CNT_F12_KEY     182
+#define CNT_F13_KEY     183
+#define CNT_F14_KEY     184
+#define CNT_F15_KEY     185
+#define CNT_F16_KEY     186
+#define CNT_F17_KEY     187
+#define CNT_F18_KEY     188
+#define CNT_F19_KEY     189
+#define CNT_F20_KEY     190
+#define CNT_1_KEY       191
+#define CNT_2_KEY       192
+#define CNT_3_KEY       193
+#define CNT_4_KEY       194
+#define CNT_5_KEY       195
+#define CNT_6_KEY       196
+#define CNT_7_KEY       197
+#define CNT_8_KEY       198
+#define CNT_9_KEY       199
+#define F0_KEY          130
+#define CNT_0_KEY       F0_KEY
+
+
+#define F_MENU_KEY  131
+#define F_ALPHA_KEY 132
+#define F_BKSP_KEY  133
+#define F_ENTER_KEY 134
+#define F_CLEAR_KEY 135
+#define F_POINT_KEY 136
+/*********************************************/
+
+
+/*---------------------------------------------------------
+ * new ascii mapping values for external keyboard enabling
+ * --------------------------------------------------------*/
+#define EXTENDED_BKSP        0x08
+#define EXTENDED_TAB         0x09
+/* 172-180 are being used by keyboard combinations (kb.c) */
+#define EXTENDED_PAPER_FEED_KEY_ASCII    181
+#define EXTENDED_FUNC_KEY_NURIT_3000     182
+#define EXTENDED_CONTROL_KEY_2055        182
+#define EXTENDED_DELETE            183
+#define EXTENDED_HOME              184
+#define EXTENDED_END               185
+#define EXTENDED_PGUP              186
+#define EXTENDED_PGDOWN            187
+
+#define EXTENDED_CE          188
+#define EXTENDED_CLEAR       188
+#define EXTENDED_LINE_FEED   188
+#define EXTENDED_ON_STBY     189
+#define EXTENDED_RADIO_LINE  190
+#define EXTENDED_UPDATE      191
+#define EXTENDED_MENU        191
+#define EXTENDED_ALTERNATIVE 192
+#define EXTENDED_ALPHA       193
+#define EXTENDED_INSERT      194
+#define EXTENDED_RIGHT_ARROW 195
+#define EXTENDED_LEFT_ARROW  196
+#define EXTENDED_DOWN_ARROW  197
+#define EXTENDED_UP_ARROW    198
+
+/*----------- External APPLICATION DEFINED KEY -----------*/
+
+/* DUBLE KEYS: CNTRL+KEY */
+#define EXTENDED_F_MENU_KEY  199
+#define EXTENDED_F_ALPHA_KEY 200
+#define EXTENDED_F_BKSP_KEY  201
+#define EXTENDED_F_ENTER_KEY 202
+#define EXTENDED_F_CLEAR_KEY 203
+#define EXTENDED_F_POINT_KEY 204
+
+#define EXTENDED_CNT_1_KEY       205
+#define EXTENDED_CNT_2_KEY       206
+#define EXTENDED_CNT_3_KEY       207
+#define EXTENDED_CNT_4_KEY       208
+#define EXTENDED_CNT_5_KEY       209
+#define EXTENDED_CNT_6_KEY       210
+#define EXTENDED_CNT_7_KEY       211
+#define EXTENDED_CNT_8_KEY       212
+#define EXTENDED_CNT_9_KEY       213
+
+/* F-KEYS */
+#define EXTENDED_F0_KEY      214
+#define EXTENDED_F1_KEY      215
+#define EXTENDED_F2_KEY      216
+#define EXTENDED_F3_KEY      217
+#define EXTENDED_F4_KEY      218
+#define EXTENDED_F5_KEY      219
+#define EXTENDED_F6_KEY      220
+#define EXTENDED_F7_KEY      221
+#define EXTENDED_F8_KEY      222
+#define EXTENDED_F9_KEY      223
+#define EXTENDED_F10_KEY      224
+#define EXTENDED_F11_KEY      225
+#define EXTENDED_F12_KEY      226
+#define EXTENDED_F13_KEY      227
+#define EXTENDED_F14_KEY      228
+#define EXTENDED_F15_KEY      229
+#define EXTENDED_F16_KEY      230
+#define EXTENDED_F17_KEY      231
+#define EXTENDED_F18_KEY      232
+#define EXTENDED_F19_KEY      233
+#define EXTENDED_F20_KEY      234
+
+/* DUBLE KEYS: CNTRL+F-KEY */
+#define EXTENDED_CNT_0_KEY       EXTENDED_F0_KEY
+#define EXTENDED_CNT_F1_KEY      235
+#define EXTENDED_CNT_F2_KEY      236
+#define EXTENDED_CNT_F3_KEY      237
+#define EXTENDED_CNT_F4_KEY      238
+#define EXTENDED_CNT_F5_KEY      239
+#define EXTENDED_CNT_F6_KEY      240
+#define EXTENDED_CNT_F7_KEY      241
+#define EXTENDED_CNT_F8_KEY      242
+#define EXTENDED_CNT_F9_KEY      243
+#define EXTENDED_CNT_F10_KEY     244
+#define EXTENDED_CNT_F11_KEY     245
+#define EXTENDED_CNT_F12_KEY     246
+#define EXTENDED_CNT_F13_KEY     247
+#define EXTENDED_CNT_F14_KEY     248
+#define EXTENDED_CNT_F15_KEY     249
+#define EXTENDED_CNT_F16_KEY     250
+#define EXTENDED_CNT_F17_KEY     251
+#define EXTENDED_CNT_F18_KEY     252
+#define EXTENDED_CNT_F19_KEY     253
+#define EXTENDED_CNT_F20_KEY     254
+
+
+#endif  /*#ifndef APPLKB_DEFINED*/
+
+
+
+
+/*----  device setting flags  ----*/
+
+#define NO_CHANGE  0
+#define SET        1
+#define DEFAULT    2
+
+/*----  leds decleration  ----*/
+
+#define PWR_FAIL_LED    	1
+#define LOW_BATT_LED    	2
+#define RADIO_LED       	3
+#define LINE_LED        	4
+#define COMM_LED        	6
+#define SEND_LED        	7
+#define RCV_LED         	8
+#define TX_LED            3
+#define RX_LED            4
+
+/*----  glb_flags  bit decleration  ----*/
+
+#define BATTERY_OPERATION	0x0001
+#define WEAK_BATTERY      0x0002
+#define PRINTER_NOT_READY	0x0004
+#define PRINTER_WORKING		0x0008
+#define OFF_HOOK       		0x0010
+#define LINE_ACTIVE    		0x0020
+#define BUSY_TONE      		0x0040
+#define OUT_OF_PAPER   		0x0080
+
+/*----  test request  bit decleration  ----*/
+
+#define PRINTER_TEST_REQ    0x00000001
+#define RAM_TEST_REQ        0x00000002
+#define KB_TEST_REQ         0x00000004
+#define CARD_R_TEST_REQ     0x00000008
+#define BUZZER_TEST_REQ     0x00000010
+#define PHONE_L_TEST_REQ    0x00000020
+#define BATTERY_TEST_REQ    0x00000040
+#define BARCODE_TEST_REQ    0x00000080
+#define CASSETTE_TEST_REQ   0x00000100
+#define DRAWER_TEST_REQ     0x00000200
+#define DISPLAY_TEST_REQ    0x00000400
+#define CLOCK_TEST_REQ      0x00000800
+#define MODEM_TEST_REQ      0x00001000
+#define RS232_TEST_REQ      0x00002000
+#define RADIO_TEST_REQ      0x00004000
+#define TICKET_R_TEST_REQ  	0x00008000
+#define CYBER_TEST_REQ      0x00010000
+
+/*----  I/O devices  ----*/
+
+#define KBD          0
+#define DISP1        1
+#define CARD_READER	 2
+#define DISP2        3
+#define BAR_CODE     4
+#define LPT1         5
+#define LPT2         7
+#define RADIO        8
+#define COM1        10
+#define COM2        12
+#define MODEM1      14
+#define MODEM       14
+#define COM3        16
+#define CYBER       18
+#define FISMEM      22
+#define PIN_PAD     24
+#define MODEM2      26
+
+#endif

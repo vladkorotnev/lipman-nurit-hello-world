@@ -1,0 +1,274 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   Comhndlr.def                                                *
+ *                                                                          *
+ * MODULE NAME: COMHNDLR.                                                   *
+ *                                                                          *
+ * PROGRAMMER:  Ofir Efrati.                                                *
+ *                                                                          *
+ * DESCRIPTION: 1.Strings definition and enumeration file                   *
+ *              2.RBM(Radio BackGround Messages utility) definitions &      *
+ *                structure                                                 *
+ *                                                                          *
+ * REVISION:    07_00 25/07/96                                              *
+ *                                                                          *
+ ****************************************************************************/
+
+#ifndef _COMHNDLR__DEF
+ #define _COMHNDLR__DEF
+ 
+  
+
+	  /*==========================================*
+	   *     1.  String Definitions               *
+	   *==========================================*/
+
+/* This .def file defines the messages used by Comhndlr and Caller module
+   as enumerated type. Inorder for an application to change the language
+   of these messages, one should place in 'MyOwnTextMsgs' type def
+   the new translated messages, as they are enumerated below            */
+
+
+/* Using User Own Messages as Output strings while Connecting : */
+
+#define TEXT_MSG_LEN_SIZE 33   /* Including Null */
+
+
+/* List of caller message definitions */
+typedef enum
+{
+   MSG_INDEX_NO_LINE = 0,
+   MSG_INDEX_NO_DIAL_TONE,
+   MSG_INDEX_NO_ANSWER_WAIT_FOR_RETRY,
+   MSG_INDEX_NO_ANSWER,
+   MSG_INDEX_MODEM_PROBLEM_WAIT_FOR_RETRY,
+   MSG_INDEX_ERR_INVALID_PHONE_NUM,
+   MSG_INDEX_ERR_NO_PHONE_NUMBER,
+   MSG_INDEX_ERR_INVALID_EX_PREF,
+   MSG_INDEX_ERR_INVALID_BYTE_FORMAT,
+   MSG_INDEX_ERR_NOT_SWITCHED_TO_COM1,
+   MSG_INDEX_BUSY_WAIT_FOR_RETRY,
+
+   MSG_INDEX_CONNECTED_300,
+   MSG_INDEX_CONNECTED_1200,
+   MSG_INDEX_CONNECTED_2400,
+   MSG_INDEX_DIALING_WAIT,
+   MSG_INDEX_CONNECTED_4800,
+   MSG_INDEX_CONNECTED_7200,
+   MSG_INDEX_CONNECTED_9600,
+   MSG_INDEX_CONNECTED_12000,
+   MSG_INDEX_CONNECTED_14400,
+   MSG_INDEX_CONNECTED_33600,
+   MSG_INDEX_CONNECTED_16800,
+   MSG_INDEX_CONNECTED_21600,
+   MSG_INDEX_CONNECTED_24000,
+   MSG_INDEX_CONNECTED_26400,
+   MSG_INDEX_CONNECTED_28800,
+   MSG_INDEX_CONNECTED_31200,
+
+   MSG_INDEX_CONNECTED_V90,
+
+   NUM_OF_MSGS
+} CallerMessages;
+
+
+/* List of ComHndlr message definitions */
+typedef enum
+{
+   MSG_INDEX_MIN_NUM_TRIES = 0,
+   MSG_INDEX_No,
+   MSG_INDEX_Yes,
+   MSG_INDEX_Tone,
+   MSG_INDEX_Pulse,
+   MSG_INDEX_Both,
+   MSG_INDEX_Line_Only,
+   MSG_INDEX_EXCHANGE_PREFIX,
+   MSG_INDEX_DIAL_TYPE,
+   MSG_INDEX_MIN_RETRIES,
+   MSG_INDEX_EXCHANGE_PREF,
+   MSG_INDEX_ENTER_PREFIX,
+   MSG_INDEX_COMM_MENU,
+   MSG_INDEX_LINE_OR_RADIO,
+   MSG_INDEX_VIA_LINE_OR_RADIO,
+   MSG_INDEX_VIA_LINE_ONLY,
+   MSG_INDEX_WAITING,
+   MSG_INDEX_DIAL_TONE,
+   MSG_INDEX_DIAL_PULSE,
+   MSG_INDEX_HDLC_WAIT_FOR_HANDSHK,
+   MSG_INDEX_HDLC_HANDSHK_FAIL,
+   MSG_INDEX_HDLC_HANDSHK_CONNECTION_OK,
+   MSG_INDEX_HDLC_CLOSING_CHANNEL,
+   MSG_INDEX_GATEWAY,
+   MSG_INDEX_SUFFIX,
+   MSG_INDEX_ENTER_GATEWAY,
+   MSG_INDEX_ENTER_SUFFIX,
+   MSG_INDEX_LINE_CHECK_ON,
+   MSG_INDEX_LINE_CHECK_OFF,
+   MSG_INDEX_DIAL_TONE_CHECK_ON,
+   MSG_INDEX_DIAL_TONE_CHECK_OFF,
+   MAX_MENU_MSGS
+} UserMessages;
+
+
+/* prototypes to be used by user inorder to replace existing messages */
+typedef char MyOwnTextMsgs[NUM_OF_MSGS][TEXT_MSG_LEN_SIZE];
+typedef char MyOwnMenuMsgs[MAX_MENU_MSGS][TEXT_MSG_LEN_SIZE];
+
+
+
+
+	  /*==========================================*
+	   *     2.  Radio BkGr Msgs Utility          *
+	   *==========================================*/
+
+
+
+/* Radio BkGr Msgs Utility uses the system BKGR proccess & the RamDisk
+   To Keep Tracing on received messges from the Radio communication,
+   This feature enables the application to maintain received data
+   on a File even though the messages were received while application was
+   busy.
+   The whole BKGR job may take place while not being in a "Call" proccess
+   "Call" means between ComHndlr_Call1/2 & ComHndlr_EndCall functions.
+   This Utility also lets The application to Send Messages via Radio Comm.
+
+
+   Using ComHndlr RBM (Radio Bkgr Messages) Via Application:
+
+   1.Open a RamDisk File & store it's handle:
+     RamDisk_NewFile (byte *FileName,
+		      usint RecrdSize, - see record limitation definitions
+		      usint Rec_Ver);
+
+   2.Make sure not between "Call" to "EndCall" - The BkGr Msg Capturer
+     will be activated only when application is not initiating a Radio Call.
+     When wish to activate the RBM receiver call the function:
+
+     ComHndlr_ActivateBkGrMsg -> See ComHndlr.h file
+
+     Make Sure not operating under Battery Save mode - Radio is turned of in
+     this mode.
+
+   3.Sending Messages by using the function ComHndlr_RbmTxRadio
+     -> See ComHndlr.h file.
+
+   4.If using the RamDisk while the RBM activated then you must make sure
+     ther's enough space on RamDisk for writting messages else if RamDisk
+     is full, received messages won't be saved.
+
+     Notice that RBM will not Append more records than determined in
+     the MaxNumOfRecs parameter.
+
+   5.To Stop the MBR use ComHndlr_StopBkGrMsg -> See ComHndlr.h file.
+
+   6.You are responsible for clearing the RamDisk File when Proccess is
+     Done. You're also responsible for taking & purging saved messages
+     to make sure ther's enough space for saving more messgaes.
+     activating RBM with file that allready contains messgaes will append it.
+     The Stop MBR (ComHndlr_StopBkGrMsg) doesn't Clear or Erases the File !
+
+   7.Errors occurres while RBM is activated are written to the Error Logger
+     & most cases causes the RBM receiver to be turned Off.
+
+
+*/
+	  /*==========================================*
+	   *           D E F I N I T I O N S          *
+	   *==========================================*/
+/***************************/
+/**  Saved Messages File: **/
+/***************************/
+
+/* RamDisk Record Size Limitations: */
+
+#define RBM_MAX_REC_SIZE 255 /* Maximum Size for Record used in the
+				messgages capture file */
+#define RBM_MIN_REC_SIZE 25  /* Minimum Size for Record used in the
+				messgages capture file */
+
+
+/* File Format:
+
+   The BackGround Received messages stored in a User PreDefined file
+   in which user determines the Record size.
+   Optimal Record size is one that can hold exactly the Message with it's
+   Starting Fields (as shown below) without any spare bytes.
+   The file will contain a list of Records each contains One Message + start
+   fields (If the Message field is too big to fit in Record - then the next
+   Record is also used for This message storage - shown below)
+
+
+   Record structure:
+   ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+
+
+	ÚÄÄ----------------- Max 255 bytes Min 25 bytes -----------------ÄÄ¿
+	³                                                                  ³
+	³                       ÚÄ---------------Text field--------------ÄÄ¿
+	³                       ³                                          ³
+	ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+ Name   ºAddress       ºText    ºDate & TIME    º Data(Message)            º
+ Field  º              ºSize    ºOf Receive     º Data(Message)            º
+	ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÎÍÍÍÍÍÍÍÍÎÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÎÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹
+ Format ºulint         ºbyte    ºstring (Text)  º Text                     º
+	ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÎÍÍÍÍÍÍÍÍ¹"MM/DD/YY HH:MMº                          º
+ Size   º4 bytes       º1-byte  º(ended with CR)º                          º
+	º              º        º               º                          º
+
+
+   Record Example:
+   ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+    Start of                                                           End of
+     Record                                                            Record
+	³                                      (CR)                        ³
+	ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	³0xXXXXXXXX    ³ 30     ³"07/25/96 11:00 Hellow world !"           ³
+	ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	³              ³        ³               ³                          ³
+
+
+   Message Exceeds record size:
+   ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+    Start of                                                           End of
+     Record                                                            Record
+	³                                      (CR)                        ³
+ First  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+ Record ³0xXXXXXXXX    ³0xFF    ³MM/DD/YY HH:MM ³Msg...                    ³
+	ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	³unused        ³0xFF    ³Msg continues...                          ³
+	ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+	³unused        ³0xFF    ³Msg continues...                          ³
+	ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+			  .             .
+			  .             .
+			  .             .
+
+ Last   ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+ Record ³unused        ³size<255³Msg continue...  end of msg.              ³
+	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁ
+
+
+*/
+
+#define DATE_TIME_WITH_CR 14+1
+
+typedef struct
+{
+  ulint SenderAddress;
+  byte TextSize;
+  char DateAndTime[DATE_TIME_WITH_CR];
+} RecordStartFields;
+
+/* for power saving mode in native */
+typedef enum {
+
+  PWRSAVE_DISABLED, /* Power savings is disabled. */
+  PWRSAVE_MAXIMUM,  /* Maximum power savings.     */
+  PWRSAVE_AVERAGE,  /* Average power savings.     */
+  PWRSAVE_MINIMUM   /* Minimum power savings.     */
+
+} PwrSaveMode;
+   
+#endif

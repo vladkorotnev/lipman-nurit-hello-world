@@ -1,0 +1,267 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   MULTIAPP.DEF                                                *
+ *                                                                          *
+ * MODULE NAME: MULTIAPP                                                    *
+ *                                                                          *
+ * PROGRAMMER:  Oren Sokoler                                                *
+ *                                                                          *
+ * DESCRIPTION: Multi Application manager definition file                   *
+ *                                                                          *
+ * REVISION:    01.00 14/02/01                                              *
+ *                                                                          *
+ ****************************************************************************/
+   
+#ifndef __MULTIAPP_DEF_      
+ #define __MULTIAPP_DEF_
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+
+     /* This file contains all the public definitions of the */ 
+     /* Multi Application manager                             */
+
+          /*==========================================*
+           *             I N C L U D E S              *
+           *==========================================*/
+
+#include formater_def
+#include grphtext_def
+#include winform_def  
+
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+              /* EvD application response type */
+
+typedef enum {
+
+  MULTIAPP_EvD_NO  ,          /* The application does not want to handle this event. */
+  MULTIAPP_EvD_YES            /* The application wants to handle this event.         */
+
+} evdApplResp;
+
+typedef enum {
+
+  MULTIAPP_HOTKEY_DISABLE ,      /* Disable hot key event */
+  MULTIAPP_HOTKEY_ENABLE         /* Enable hot key event  */
+
+} MultiAppKeyMode;
+
+typedef enum {
+
+  MULTIAPP_TIMER_DISABLE ,       /* Enable timer event  */
+  MULTIAPP_TIMER_ENABLE          /* Disable timer event */
+
+} MultiAppTimerMode;
+
+                      /* Definitions */
+
+#define          MULTIAPP_APPL_EVENT_NAME_LEN       8
+
+          /*==========================================*
+           *               E V E N T S                *
+           *==========================================*/
+
+/* This section defines the events an application can receive from */
+/* the NOS                                                         */
+                   /* ----------------- */
+                   /* WinForn Options   */
+                   /* ----------------- */
+
+#define WINFORM_OPTIONS_VER 0
+
+typedef struct
+{
+    byte        StructVer;      /* The struct version == WINFORM_OPTIONS_VER */
+    boolean     WinFormEnable;  /* Use WinForm or formater (By defualt disable) */
+    usint       CenterWidth;    /* width of the center menu */
+    PanelStyle  ButtonStyle;   
+    usint       Timeout;        /*in sec, if ==0, then do not used */
+    long        Color;          /* items background color*/
+    char*       TitleText;       /* the title text */
+    
+    /* Menus Icon Options */
+    long        MenuBkgrColor;  /* icon's background color */
+    long        MenuTextColor;  /* icon's text color */
+    char        MenuFont;       /* icon's text font */
+    
+    /* Applications Icon Options */
+    long        ApplBkgrColor;  /* icon's background color */
+    long        ApplTextColor;  /* icon's text color */
+    char        ApplFont;       /* icon's text font */
+    
+} evdWinFormOptions;
+    
+    
+                   /* ----------------- */
+                   /* Card reader event */
+                   /* ----------------- */
+#define CARDRDR_OPTIONS_VER 0
+typedef struct
+{
+    byte    StructVer;     /* The struct version == CARDRDR_OPTIONS_VER */
+    boolean ManualEnable;  /* Manual card enable (by default enable)*/
+    boolean CheckDate;     /* CheckFor Date (default disable) */
+    byte    CardLen;       /* Max Value 32 (by default 32) */
+}
+    CardRdrEventOptions;
+
+typedef struct {
+
+  byte   *Track1; /* Track one data         */
+  sint    Error1; /* Track one error        */
+  byte   *Track2; /* Track two data         */
+  sint    Error2; /* Track two error        */
+  boolean Manual; /* Manual card entry flag */
+  char   *ExpDate;/* Expiered date entered by the user (e.g MMYY) if NULL ...*/
+  byte   *Track3; /* Track 3 data         */
+  sint    Error3; /* Track 3 error        */
+
+} evdCardReaderEvent;
+
+                   /* ----------------- */
+                   /* Smart Card event  */
+                   /* ----------------- */
+
+typedef struct {
+
+  void *Data;          /* Part of ATR data */
+  byte  SizeOfData;    /* Size of ATR data */
+  byte  SizeOfHistory; /* Size of History  */
+  byte  Protocol;      /* Protocol         */
+  byte  Port;          /* Port #           */
+
+} evdSmartCardEvent;
+
+                   /* ------------------ */
+                   /* Check reader event */
+                   /* ------------------ */
+
+typedef struct {
+
+  void *Data; /* To be defined in the future */
+
+} evdCheckReaderEvent;
+
+                 /* --------------------- */
+                 /* Bar code reader event */
+                 /* --------------------- */
+
+typedef struct {
+
+  byte *BarCodeData; /* Bar code data */
+
+} evdBarCodeEvent;
+
+                     /* ------------- */
+                     /* Hot key event */
+                     /* ------------- */
+
+typedef struct {
+
+  usint HotKeyID; /* Hot key ID that was pressed , ID supplied by the application */
+
+} evdHotKeyEvent;
+
+
+/* Hot key configuration structure */
+typedef struct
+{
+  char *EvDName;          /* Application name */
+  byte  Key;              /* Key combination  */
+  usint HotKeyID;         /* Key ID           */
+  MultiAppKeyMode Mode;   /* Enable/Disable   */
+
+} MultiAppHotKey;
+
+
+                  /* ------------------- */
+                  /* Communication event */
+                  /* ------------------- */
+
+typedef struct {
+
+  byte CommPort; /* Communication port that generated the event */
+
+} evdCommEvent;
+
+                      /* ----------- */
+                      /* Timer event */
+                      /* ----------- */
+
+typedef struct {
+
+  usint TimerID; /* Timer ID as supplied by the application */
+
+} evdTimerEvent;
+
+                 /* ---------------------- */
+                 /* InterApplication event */
+                 /* ---------------------- */
+
+typedef struct {
+
+  void *EventData;                               /* Pointer to event data         */
+  char  EventName[MULTIAPP_APPL_EVENT_NAME_LEN]; /* Event name NOT NUL terminated */
+
+} evdApplEvent;
+
+          /*==========================================*
+           *               M E N U S                  *
+           *==========================================*/
+
+                      /* Definitions */
+
+#define       MULTIAPP_MENU_PTR_TYPE       0  /* The menu_ptr member is a menu pointer     */
+#define       MULTIAPP_MENU_FUNC_TYPE      1  /* The menu_ptr member is a function returning menu pointer */
+#define       MULTIAPP_ATM_MENU_PTR_TYPE   2  /* The menu_ptr member is a atm menu pointer */
+#define       MULTIAPP_ATM_MENU_FUNC_TYPE  3  /* The menu_ptr member is a function returning atm menu pointer */
+
+                        /* Types */
+
+typedef menu         * (evdMenuFType)(void);  /* A function that returns a menu pointer */
+typedef evdMenuFType * evdMenuFTypeP;
+
+typedef packed struct {
+
+           usint        menu_type;   /* The type of menu_ptr member                              */
+           void       * menu_ptr;    /* Pointer to a func / menu that the EvD application uses   */
+           const char * menu_str;    /* Pointer to the entry name of the EvD application or NULL */
+
+} MenuEntryType;
+
+                        /* Macros */
+
+#define       MULTIAPP_MENU_PTR(m,str)     {MULTIAPP_MENU_PTR_TYPE,((void *)(ulint)(&(m))),str}
+#define       MULTIAPP_MENU_FUNC(m,str)    {MULTIAPP_MENU_FUNC_TYPE,((void *)(ulint)(&(m))),str}
+#define       MULTIAPP_ATMMENU_PTR(m,str)  {MULTIAPP_ATM_MENU_PTR_TYPE,((void *)(ulint)(&(m))),str}
+#define       MULTIAPP_ATMMENU_FUNC(m,str) {MULTIAPP_ATM_MENU_FUNC_TYPE,((void *)(ulint)(&(m))),str}
+#define       MULTIAPP_MENU_NONE           {0,NULL,NULL}
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+            /* EvD application event function table */
+
+typedef void (evdCallFuncType)( void *, ulint );
+typedef void (evdRedrawType)( void );
+typedef evdApplResp (evdIsFType)( void *evdEvent , char         **PreMenuStr );
+typedef evdApplResp (evdDoFType)( void *evdEvent , evdApplEvent **ApplEvent  );
+
+typedef evdIsFType  *evdIsFTypeP;
+typedef evdDoFType  *evdDoFTypeP;
+typedef evdRedrawType *evdRedrawTypeP;
+
+typedef packed struct {
+
+    evdIsFType *IsEvent;  /* IsEvent function */
+    evdDoFType *DoEvent;  /* DoEvent function */
+
+} evdFuncTbl;
+
+#endif

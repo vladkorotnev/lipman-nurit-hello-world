@@ -1,0 +1,128 @@
+/************************************************
+ * FILE NAME:   GSM_MSG.DEF
+ * MODULE NAME: GSMRADIO
+ * PROGRAMMER:  Oren Sokoler
+ * DESCRIPTION: GSM message structures
+ * REVISION:    28/12/2000
+ ************************************************/
+
+   /*=======================================*
+    *   I N T R O D U C T I O N             *
+    *=======================================*/
+
+/*
+ *
+ *  This file defines all the structures of the GSM SMS and USSD
+ *  file format
+ *
+ */
+
+   /*=======================================*
+    *        D E F I N I T I O N S          *
+    *=======================================*/
+
+#define         GSM_SMS_ADDR_LEN                 20 /* Address field length        */
+#define         GSM_SMS_TIME_STAMP_LEN           20 /* Timestamp field length      */
+#define         GSM_SMS_MSG_LEN                 160 /* Maximum length of SMS body  */
+
+#define         GSM_PDU_MSG_LEN                 192 /* maximum length of TPDU + SCADDR */
+
+#define         GSM_USSD_MSG_LEN                183 /* Maximum length of USSD msg  */
+
+   /* ======================================*
+    *    T Y P E  D E C L A R A T I O N     *
+    * ======================================*/
+
+/*
+ *
+ * The GSMSmsFileStruct structure defines the way SMS messages are stored in a RAMDISK file
+ * so that the application can read these messages. The message (or record) format is :
+ *
+ *
+ *   Len  Len TOA FO  PID DCS TOA  Source Address          Alpha                   Time stamp
+ * -------------------------------------------------------------------------------------------------------
+ * | LL | LL | T | F | P | D | T | AAAAAAAAAAAAAAAAAAAAA | AAAAAAAAAAAAAAAAAAAAA | YY/MM/DD,HH:MM:SS+ZZ ..
+ * -------------------------------------------------------------------------------------------------------
+ *    2    2   1   1   1   1   1          21                      21                        20
+ *    |    |   |   |   |   |   |           |                       |                         |
+ *    +----+---+---+---+---+---+-----------+--------------+--------+-------------------------+
+ *                                                        | 
+ *       Service Center address  Message body             |
+ * ---------------------------------------------------------------------------
+ * ... | AAAAAAAAAAAAAAAAAAAAA | MMMMMMMMMMMMMMMMMMMMMMMMM ... MMMMMMMMMMMMM |
+ * ---------------------------------------------------------------------------
+ *               21                               160     |
+ *                |                                |      |
+ *                +--------------------------------+------+
+ *                          |
+ *                          |
+ *                         \|/
+ *                   Length in bytes
+ *
+ */
+
+typedef struct {
+
+ usint MsgBodyLen;                                 /* Message body length                     */
+ usint SMSLen;                                     /* SMS Length as received from the network */
+ byte  TypeOfAddr;                                 /* Type of source address                  */
+ byte  FirstOctet;                                 /* First octet                             */
+ byte  ProtocolID;                                 /* Protocol identifier                     */
+ byte  DataCodeScheme;                             /* Data coding scheme                      */
+ byte  TypeOfSCAddr;                               /* Type of SC address                      */
+ char  SourceAddr[GSM_SMS_ADDR_LEN+1];             /* Message source address (NUL terminated) */
+ char  Alpha     [GSM_SMS_ADDR_LEN+1];             /* Message alpha address (NUL terminated)  */ 
+ char  TimeStamp [GSM_SMS_TIME_STAMP_LEN];         /* Message time stamp                      */
+ char  SCAddr    [GSM_SMS_ADDR_LEN+1];             /* Message SC address (NUL terminated)     */ 
+ char  MsgBody   [GSM_SMS_MSG_LEN];                /* Message body                            */
+
+} GSMSmsFileStruct;
+
+/*
+ *
+ * The GSMUssdFileStruct structure defines the way USSD messages are stored in a RAMDISK file
+ * so that the application can read these messages. The message (or record) format is :
+ *
+ *
+ *  Time    
+ *  Stamp   Len   Message body
+ * -----------------------------------------------------------
+ * | TTTT  | L | MMMMMMMMMMMMMMMMMMMMMMMMM ... MMMMMMMMMMMMM |
+ * -----------------------------------------------------------
+ *    4      1                     183
+ *    |      |                      |
+ *    +------+----------+-----------+
+ *                      |
+ *                      |
+ *                     \|/
+ *
+ *               Length in bytes
+ *
+ * NOTE : The first byte of the body message is the network response code as defined
+ *        in GSM 07.07 (AT+CUSD command) , i.e : '0','1','2','3','4' or '5'
+ *
+ */
+
+typedef struct {
+ 
+ ulint TimeStamp;                                  /* Message time stamp in milliseconds */
+ byte  Len;                                        /* Message body length                */
+ char  MsgBody   [GSM_USSD_MSG_LEN];               /* Message body                       */
+
+} GSMUssdFileStruct;
+
+/*
+ *
+ * The GSMPduFileStruct structure defines the way PDU SMS messages are stored in a RAMDISK file
+ * so that the application can read these messages. The message (or record) format is :
+ * Size of message in bytes.
+ * PDU string in binary representation (bytes) i.e. after the hex ascii -> byte conversion
+ * 
+ */
+
+typedef struct {
+ 
+ byte  Size;                                   /* PDU string length                */
+ byte  PduStr[GSM_PDU_MSG_LEN];                /* PDU string body (TPDU+SCADDR)    */
+
+} GSMPduFileStruct;

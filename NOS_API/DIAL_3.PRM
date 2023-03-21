@@ -1,0 +1,207 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   DialTgts.PRM                                                *
+ *                                                                          *
+ * MODULE NAME: ComHndler                                                   *
+ *                                                                          *
+ * PROGRAMMER:  Avishai                                                     *
+ *                                                                          *
+ * DESCRIPTION: Dial Targets                                                *
+ *                                                                          *
+ * REVISION:    01.01 14/06/94                                              *
+ *                                                                          *
+ * HISTORY:     none                                                        *
+ *                                                                          *
+ ****************************************************************************/
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+          /*=============================================================*
+           *               I N T R O D U C T I O N                       *
+           *=============================================================*/
+
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+#ifndef __DIALTGTS_PRM
+#define __DIALTGTS_PRM
+
+
+          /*=============================================================*
+           *                 D E F I N I T I O N S                       *
+           *=============================================================*/
+
+#define DIAL_TARGETS   "DTRGTS" /* this is the block name                  */
+
+#define MAX_PH_NUM_PER_TARGET 3 /* number of phone numbers for each target */
+#define FORMAT_7E             0
+#define FORMAT_7O             1
+#define FORMAT_7N             2
+#define FORMAT_8E             3
+#define FORMAT_8O             4
+#define FORMAT_8N             5
+
+
+#define LINE_ONLY      -1
+#define PhoneNumLength 16
+#define COMMTYPE_MASK   0x03
+#define SYNC_HDLC       1
+
+/* Dial tone check */
+#define COMMTYPE_DIAL_TONE_CHECK         0
+#define COMMTYPE_NO_DIAL_TONE_CHECK      0x80
+
+/* Priority to application, if Comhndlr menu entry is different */
+#define COMMTYPE_APP_PRIORITY_DTC        0x40
+
+/* Phone line check */
+#define COMMTYPE_PHONE_LINE_CHECK        0x20
+#define COMMTYPE_NO_PHONE_LINE_CHECK     0
+
+/* Priority to application, if Comhndlr menu entry is different */
+#define COMMTYPE_APP_PRIORITY_PLC        0x10
+
+/* Tone or Pulse */
+#define COMMTYPE_TONE_DIAL               0
+#define COMMTYPE_PULSE_DIAL              0x8
+
+/* Priority to application, if Comhndlr menu entry is different */
+#define COMMTYPE_APP_PRIORITY_DIAL       0x4
+
+
+
+
+
+          /*=============================================================*
+           *       T Y P E  &  S T R U C T    D E C L A R A T I O N      *
+           *=============================================================*/
+#ifndef CENTER_MMI
+  #define  NOT_CONNECTED      0
+  #define  MODEM_MAX_BAUD_300    '2'
+  #define  MODEM_MAX_BAUD_1200   '4'
+  #define  MODEM_MAX_BAUD_2400   '5'
+  #define  MODEM_MAX_BAUD_4800   '6'
+  #define  MODEM_MAX_BAUD_7200   '7'
+  #define  MODEM_MAX_BAUD_9600   '8'
+  #define  MODEM_MAX_BAUD_12000  '9'
+  #define  MODEM_MAX_BAUD_14400  'A'
+  #define  MODEM_MAX_BAUD_33600  'B'
+  #define  MODEM_MAX_BAUD_56000  'C'
+  #define  MODEM_MAX_14400_MIN_4800  'Z'
+
+  #define  MODEM_MIN_NO_LIMIT    (0)
+  #define  MODEM_MIN_BAUD_300    (0x20)
+  #define  MODEM_MIN_BAUD_1200   (0x40)
+  #define  MODEM_MIN_BAUD_2400   (0x50)
+  #define  MODEM_MIN_BAUD_4800   (0x60)
+  #define  MODEM_MIN_BAUD_7200   (0x70)
+  #define  MODEM_MIN_BAUD_9600   (0x80)
+  #define  MODEM_MIN_BAUD_12000  (0x90)
+  #define  MODEM_MIN_BAUD_14400  (0xa0)
+  #define  MODEM_MIN_BAUD_33600  (0xb0)
+  #define  MODEM_MIN_BAUD_56000  (0xc0)
+
+  typedef  struct
+  {
+     usint AnswerToneTimeout;       /* in seconds. expert parameter.  2
+                                       DEFAULT: 30                      */
+     char PhoneNum[PhoneNumLength]; /* ASCII, NULLs = blank          16 */
+     char BitRate;                  /* '2' - 300
+                                       '4' - 1200
+                                       '5' - 2400
+                                       '6' - 4800
+                                       '7' - 7200
+                                       '8' - 9600
+                                       '9' - 12000
+                                       'A' - 14400                
+                                       'B' - 33600                
+                                       'C' - 56000  */
+     byte ByteFormat;               /* FORMAT_7E/FORMAT_7O/FORMAT_7N  1 */
+                                    /* FORMAT_8E/FORMAT_8O/FORMAT_8N    */
+     boolean LogOnProtocolEn;       /* TRUE/FALSE                     1 */
+     boolean even_rounder;          /* Least half byte =1 is fast connect */
+                                    /* mode for 1200 only */
+                                    /* Least half byte =3 is fast connect */
+                                    /* mode 2 (South America) for 1200 only */
+                                    /* Most half byte is min baud rate */
+  } PhoneParamType;
+
+  typedef  struct /*The parameters are an array of this structure */
+  {
+    PhoneParamType PhoneParam[MAX_PH_NUM_PER_TARGET];
+                            /*in order to use less then MAX_PH_NUM_PER
+                              _TARGET phone numbers, put NULL in
+                              PhoneNum[0] for each unused phone number.     */
+    byte NumberOfTrials;    /*expert parameter,  DEFAULT: 2                 */
+    signed char RadioIndex; /*index to RADIO_PARAMS, LINE_ONLY=-1 -line only*/
+    boolean LinePriority;   /*TRUE - try line before radio                  */
+    byte CommType;          /*SYNC_HDLC - as a hdlc request, 0 for async    */
+  } DialTargetType;
+
+  #define  NOT_CONNECTED      0
+  #define  CONNECT_300        1
+  #define  CONNECT_1200       2
+  #define  CONNECT_2400       3
+  #define  CONNECT_FAST1200   4
+  #define  CONNECT_FAST2400   5
+  #define  CONNECT_4800       6
+  #define  CONNECT_7200       7
+  #define  CONNECT_9600       8
+  #define  CONNECT_12000      9
+  #define  CONNECT_14400      10
+  #define  CONNECT_33600      11
+  #define  CONNECT_16800      12
+  #define  CONNECT_21600      13
+  #define  CONNECT_24000      14
+  #define  CONNECT_26400      15
+  #define  CONNECT_28800      16
+  #define  CONNECT_31200      17
+  #define  CONNECT_56000      18
+  #define  CONNECT_32000      19
+  #define  CONNECT_48000      20
+  #define  CONNECT_28000      21
+  #define  CONNECT_29333      22
+  #define  CONNECT_30666      23
+  #define  CONNECT_33333      24
+  #define  CONNECT_34666      25
+  #define  CONNECT_36000      26
+  #define  CONNECT_37333      27
+  #define  CONNECT_38666      28
+  #define  CONNECT_40000      29
+  #define  CONNECT_41333      30
+  #define  CONNECT_42666      31
+  #define  CONNECT_44000      32
+  #define  CONNECT_45333      33
+  #define  CONNECT_46666      34
+  #define  CONNECT_49333      35
+  #define  CONNECT_50666      36
+  #define  CONNECT_52000      37
+  #define  CONNECT_53333      38
+  #define  CONNECT_54666      39
+
+  typedef  struct
+  {
+    byte   Busy;
+    byte   NoCarrier;
+    byte   NoDialTone;
+    byte   NoLine;
+    byte   LastConnect;/* 300/1200/2400/FAST2400 etc.*/
+    usint  ConnectTime;/* time in 100ms units from start of dialing to
+                          connect */
+
+  } TCallStatistics; /*Fail reasons per destination(phone number) */
+  typedef  struct
+  {
+    TCallStatistics  PhoneStat[MAX_PH_NUM_PER_TARGET];
+  } TComStatistics;  /*fail reasons for a dial target */
+
+#endif /*#ifndef CENTER_MMI*/
+
+
+#endif /*#ifndef __DIALTGTS_PRM*/
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

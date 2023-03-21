@@ -1,0 +1,127 @@
+/************************************************
+ * FILE NAME:   AT_RADIO.PRM
+ * MODULE NAME: AT_RADIO
+ * PROGRAMMER:  Michael Lobak & Irina
+ * DESCRIPTION: CDPD (AT) radio modem.
+ * NOTE:	Some radio data placed
+ *		in ASCII file RADIO.INI
+ * REVISION:    07/01/99.
+ ************************************************/
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+
+       /*=======================================*
+	*	I N T R O D U C T I O N		*
+	*=======================================*/
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+#ifndef __AT_RADIO_PRM
+#define __AT_RADIO_PRM
+
+
+       /*=======================================*
+	*	D E F I N I T I O N S		*
+	*=======================================*/
+#define AT_RADIO_PARAM	"ATCDPD"
+#define AT_TARGET_PARAM	"ATTARG"
+#define AT_TARGET_PARAM1 "ATTAR1"
+#define AT_TARGET2_PARAM  "ATTRG2"
+
+#define MaxNumberOfStrings    32
+#define TOTAL_STRINGS_SIZE  1024
+#define TCP_PROTOCOL        'T'
+#define UDP_PROTOCOL        'P'
+#define  CDPD_MIN_TOUT      3  /* min.timeout in sec */
+/* Control characters for CDPD start string */
+#define  CDPD_SIDE_CC      's'   /* Side */
+#define  CDPD_IP_CC        'i'   /* Terminal IP address */
+#define  CDPD_TOUT_CC      't'   /* Time out */
+#define  CDPD_STRING_CC    'e'   /* separator before next AT command */
+
+       /* ======================================*
+	*    T Y P E	D E C L A R A T I O N	*
+	* ======================================*/
+typedef PACKED enum
+{			     /***	Radio Modem Name:	      ***/
+   ERICSSON_Radio,	     /* = 0 "2070 RAM" (old name: "ERICSSON Radio"	   */
+   RAM_2090		=  3,/* Used in NURIT Center only. For NOS = ERICSSON_Radio */
+   RAM_3010		=  5,/* Used in NURIT Center only. For NOS = ERICSSON_Radio */
+
+   MOTOROLA_Radio	= 10,
+
+   LINE_MODEM		= 20,/*	"External Line Modem"			*/
+
+   CDPD_US_WIRELESS_DATA= 40,/* "2070 CDPD Novatel"			*/
+   CDPD_2090_Novatel    = 42,/* Used in NURIT Center only. For NOS = CDPD_US_WIRELESS_DATA */
+   CDPD_3010_Novatel    = 44,/* Used in NURIT Center only. For NOS = CDPD_US_WIRELESS_DATA */
+
+   CINCINNATI_MICROWAVE = 60,/* "2090 CDPD US Wireless"			*/
+   CDPD_3010_US_Wireless= 62,
+
+   WITHOUT_Radio        =127
+} ModemTypeEnum;
+
+typedef PACKED enum
+{		/***	Radio Modem Side:	      ***/
+HOME_ONLY='0',
+A_ONLY,
+B_ONLY,
+A_PREFERRED,
+B_PREFERRED
+} RadioSide;
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ * There is one block of the following struct  *
+ * * * * * * * * * * * * * * * * * * * * * * * */
+typedef  struct
+{			  /* sizeof (AtRadioParamStruct)	=	15  */
+   usint StringDirStart,  /* Offset to strings directory  (Now it equal 15) */
+	 BitRate;	  /* In BPS (Bits per second). 9600 is default.	    */
+   byte  NumberOfStrings, /* from 0 to MaxNoOfStrings			    */
+	 DataBits,	  /* may be equal 7 (default) or 8		    */
+	 Parity,	  /* 'n' - none;  'e' - even (default);  'o' - odd; */
+	 ModemType,	  /* see ModemTypeEnum				    */
+	 TimeOut,	  /* in seconds. default equal 45.		    */
+	 NumberOfAttempts;/* from 0 to 255. default equal 3.		    */
+    byte TerminalIP[4];   /* Internet protocol address for teminal */
+    byte Side;            /*  RadioSide  */
+/* Note: In a "ATCDPD" communication block (from PC to NURIT_2070)
+	 we have after data of this record an additional data:
+
+   byte  StringSize [virtual NumberOfStrings]; for example :
+		    [ 0 ] - String for modem reseting.
+		    [ 1 ] - For making a call (before the ATD command)
+		    [ 2 ] - String for auto-answering
+		    [...] -
+
+   char  Strings [StringSize[0]+StringSize[1]+...+StringSize[NumberOfStrings]];
+Description:
+ from offset	0		placed	: string1 without null terminated.
+ from offset StringSize[0]	placed	: string2 without null terminated.
+ from offset StringSize[0]+StringSize[1]: string3 without null terminated...*/
+
+} AtRadioParamStruct;
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * There is one or more blocks (referenced by index) of the following struct *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+typedef  struct
+{
+   byte  CDPD_HostAddress   [4];	/* Internet protocol address	    */
+   usint CDPD_PortNumber;		/* TCP / UDP port number: 0 ö 65535 */
+   /*  LineTelephoneNumber[0] =T for TCP protocol, =P for UDP protocol */
+   char  LineTelephoneNumber[19+1];	/* null terminated string	    */
+} AtTargetParamStruct;			/* 4 + 2 + 20 = 26 bytes	    */
+
+
+#endif
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

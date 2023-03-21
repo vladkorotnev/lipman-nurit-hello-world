@@ -1,0 +1,64 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   SESSION.def                                                 *
+ *                                                                          *
+ * MODULE NAME: SESSION                                                     *
+ *                                                                          *
+ * PROGRAMMER:  Arie Gleizer                                                        *
+ *                                                                          *
+ * DESCRIPTION: Session Communication Protocol Layer.                       *
+ *                                                                          *
+ * REVISION:    01_00                                                       *
+ *                                                                          *
+ ****************************************************************************/
+
+#ifndef __SESSION_DEF
+#define __SESSION_DEF
+
+	  /*==========================================*
+	   *         I N T R O D U C T I O N          *
+	   *==========================================*/
+
+	  /*==========================================*
+	   *           D E F I N I T I O N S          *
+	   *==========================================*/
+
+#define IDLEN	16
+#define IPLEN	16
+
+#ifdef __WIN32__
+#pragma option -a1   /*set byte alignement*/
+#endif
+
+typedef packed struct APPINFO
+{
+  char   RemoteIp[IPLEN];  	/* Remote IP address	*/
+  char   LocalIp[IPLEN];   	/* Local IP address	*/
+  char   RemoteId[IDLEN];  	/* Remote  site ID	*/
+  char   LocalId[IDLEN]; 	/* Local site ID	*/
+
+} APPINFO;
+
+typedef packed struct
+{
+  char  LocalId[IDLEN];		/* Local Site identification */
+  char  LocalIp[IPLEN];		/* Local IP address */
+  char  RemoteId[IDLEN];	/* Remote Site identification */
+  char  RemoteIp[IPLEN];	/* Remote IP address */
+  usint AppId;			/* Application Identification */
+  byte  AppVer;         	/* Application Major version  */
+
+} SesPrm;
+
+#ifdef WITHTCPIP
+  #define SESSION_TCP_TOUT  120000   /*tcp timeout 120 sec.*/
+#endif
+
+
+#ifdef __WIN32__
+#pragma option -a.   /*set byte alignement*/
+#endif
+
+
+#endif
+

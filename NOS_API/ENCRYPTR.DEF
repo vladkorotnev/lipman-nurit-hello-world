@@ -1,0 +1,503 @@
+/***************************************************************************
+ *                                                                         *
+ * FILE NAME:   encryptr.def                                               *
+ *                                                                         *
+ * MODULE NAME: Encryptor                                                  *
+ *                                                                         *
+ * PROGRAMMER:  Rami Rosenbaum.                                            *
+ *                                                                         *
+ * DESCRIPTION: Encrypt data.                                              *
+ *                                                                         *
+ * REVISION:    01_00                                                      *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef _ENCRYPTR_DEF_
+#define _ENCRYPTR_DEF_
+
+
+                /*==========================================*
+                 *           D E F I N I T I O N S          *
+                 *==========================================*/
+
+#define ENCRYPTR_PIN_BLOCK_LEN              8
+
+#define ENCRYPTR_KEY_HEADER_SIZE            2
+#define ENCRYPTR_KEY_LEN                    8
+#define ENCRYPTR_KEY_LEN_3DES16             (2 * ENCRYPTR_KEY_LEN)
+#define ENCRYPTR_KEY_LEN_3DES24             (3 * ENCRYPTR_KEY_LEN)
+
+#define ENCRYPTR_DUKPT_SERIAL_NUM_LEN       10
+#define ENCRYPTR_DUKPT_KEY_LEN              (ENCRYPTR_KEY_LEN + 1)
+#define ENCRYPTR_DUKPT_3DES_KEY_LEN         (ENCRYPTR_KEY_LEN_3DES16 + 1)
+#define ENCRYPTR_DUKPT_KEYS_DB_SIZE         21
+
+#define ENCRYPTR_PASSWORD_LEN               8
+
+#define ENCRYPTR_RESULT_LEN                 8
+/* If a new encryption type needs a bigger buffer for RESULT, update MAX as needed */
+#define ENCRYPTR_MAX_RESULT_LEN             (ENCRYPTR_RESULT_LEN + ENCRYPTR_DUKPT_SERIAL_NUM_LEN)
+
+#define ENCRYPTR_MAX_MAC_DATA_LEN           800 /* For ARM Only !!! On other platforms: 512 bytes */
+#define ENCRYPTR_MAX_DATA_LEN               512
+
+
+                /* ======================================= *
+                 *     T Y P E   D E C L A R A T I O N     *
+                 * ======================================= */
+
+/* Encryption Key Types - second byte of KeyDB-Specific-Header. */
+typedef packed enum
+{
+    /* --- PASSWORD --- */
+    ENCRYPTION_PASSWORD_KEY			    = 0x05,     /* For a Key containing Password value */
+
+    /* --- PIN (DES) --- */
+    ENCRYPTION_PIN_KEY_DES              = 0x10,     /* DES 8-byte key */
+    ENCRYPTION_PIN_MASTER_KEY_DES       = 0x12,     /* DES 8-byte key */
+    ENCRYPTION_PIN_DUKPT_KEY_DES        = 0x13,     /* DES 8-byte key + 10-byte Serial Number */
+
+    /* --- PIN (3-DES) --- */
+    ENCRYPTION_PIN_KEY_3DES_16          = 0x30,     /* 3-DES 16-byte key */
+    ENCRYPTION_PIN_KEY_3DES_24          = 0x31,     /* 3-DES 24-byte key */
+    ENCRYPTION_PIN_MASTER_KEY_3DES      = 0x32,     /* 3-DES 16-byte key */
+    ENCRYPTION_PIN_DUKPT_KEY_3DES       = 0x33,     /* 3-DES 16-byte key + 10-byte Serial Number */
+
+    /* --- MAC --- */
+    ENCRYPTION_MAC_HYPERCOM_KEY_DES     = 0x14,     /* DES 8-byte key    */
+    ENCRYPTION_MAC_HYPERCOM_KEY_3DES    = 0x34,     /* 3-DES 16-byte key */
+    ENCRYPTION_MAC_ANSI_KEY_DES         = 0x15,     /* DES 8-byte key    */
+    ENCRYPTION_MAC_ANSI_KEY_3DES        = 0x35,     /* 3-DES 16-byte key */
+
+    /* --- DATA --- */
+    ENCRYPTION_DATA_KEY_DES             = 0x16,     /* DES 8-byte key    */
+    ENCRYPTION_DATA_KEY_3DES_16         = 0x36,     /* 3-DES 16-byte key */
+    ENCRYPTION_DATA_KEY_3DES_24         = 0x37,     /* 3-DES 24-byte key */
+
+    ENCRYPTION_DATA_MASTER_KEY_DES      = 0x18,     /* DES 8-byte key    */
+    ENCRYPTION_DATA_MASTER_KEY_3DES     = 0x38,     /* 3-DES 16-byte key */
+
+    /* --- IRREVERSIBLE PIN --- */
+    ENCRYPTION_IRREVERSIBLE_PIN_KEY_DES = 0x1A,     /* DES 8-byte key    */
+    ENCRYPTION_IRREVERSIBLE_PIN_KEY_3DES= 0x3A,     /* 3-DES 16-byte key */
+
+    /* --- APACS 40 KEY REG --- */
+    ENCRYPTION_APACS40_REG_KEY_DES      = 0x1D,     /* The APACS 40 "Key Register" DES 8-byte key    */
+    ENCRYPTION_APACS40_REG_KEY_3DES     = 0x3D,     /* The APACS 40 "Key Register" 3-DES 16-byte key */
+
+    /* --- RSA --- */
+    ENCRYPTION_DATA_KEY_RSA             = 0x50,     /* RSA key. (Currently NOT AVAILABLE) */
+
+    /* --- Key Transport Key --- */
+    ENCRYPTION_KTK_3DES_16              = 0x60,     /* Keys Transport Key 3-DES 16-byte. Is UNIQUE per terminal */
+    ENCRYPTION_TRANSPORT_KEY_3DES_16	= 0x61,     /* Key of type Transport Key                                -/
+                                                    /- Goal: To load other keys in a hierarchical model         */
+    ENCRYPTION_TK_COMPONENT_DES         = 0x62,     /* Transport Key Component                                  -/
+                                                    /- It is a DES key used to calculate a Transport Key        */
+    ENCRYPTION_TK_COMPONENT_3DES_16     = 0x63      /* Transport Key Component                                  -/
+                                                    /- It is a 3-DES key used to calculate a Transport Key      */
+
+#ifdef _ARM
+    , ENCRYPTION_KEY_MAX                = 0xFF      /* Maximum size - 1 byte */
+#endif
+} E_EncryptionKeyType;
+
+/* Encryption Algorithm Types */
+typedef packed enum
+{
+    /* --- PIN (DES) --- */
+    ENCRYPTION_PIN_DES                  = 0x10,     /* DES (ECB = Electronic Codebook)        */
+    ENCRYPTION_PIN_MASTER_DES           = 0x12,     /* DES 8-byte key, 8  bytes Working Key   */
+    ENCRYPTION_PIN_DUKPT_DES            = 0x13,     /* DES 8-byte key, 10 bytes Serial Number */
+
+    /* --- PIN (3-DES) --- */
+    ENCRYPTION_PIN_3DES_16              = 0x30,     /* Basic 3-DES.   K = KL|KR.           
+                                                       - Encrypt: eK(D) = eKL(dKR(eKL(D))) 
+                                                       - Decrypt: dK(D) = dKL(eKR(dKL(D)))      */
+    ENCRYPTION_PIN_3DES_24              = 0x31,     /* 3-DES Triple Length. K = K1|K2|K3.      
+                                                       - Encrypt: eK(D) = eK3(dK2(eK1(D))) 
+                                                       - Decrypt: dK(D) = dK1(eK2(dK3(D)))      */
+    ENCRYPTION_PIN_MASTER_3DES          = 0x32,     /* DES 16-byte key, 16 bytes Working Key    */
+    ENCRYPTION_PIN_DUKPT_3DES           = 0x33,     /* DES 16-byte key, 10 bytes Serial Number  */
+
+    /* --- MAC --- */
+    ENCRYPTION_MAC_HYPERCOM_DES         = 0x14,     /* DES 8-byte key    */
+    ENCRYPTION_MAC_HYPERCOM_3DES        = 0x34,     /* 3-DES 16-byte key */
+    ENCRYPTION_MAC_ANSI_DES             = 0x15,     /* DES 8-byte key    */
+    ENCRYPTION_MAC_ANSI_3DES            = 0x35,     /* 3-DES 16-byte key, 16 bytes Working Key  */
+
+    /* --- DATA (DES) --- */
+    ENCRYPTION_DATA_DES                 = 0x16,     /* DES 8-byte key    */
+    ENCRYPTION_DATA_3DES_16 	        = 0x36,     /* 3-DES 16-byte key */
+    ENCRYPTION_DATA_3DES_24             = 0x37,     /* 3-DES 24-byte key */
+
+    ENCRYPTION_DATA_MASTER_DES          = 0x1B,     /* DES 8-byte key,    8  bytes Working Key */
+    ENCRYPTION_DATA_MASTER_3DES         = 0x3B,     /* 3-DES 16-byte key, 16 bytes Working Key */
+
+    /* --- DATA (UNDES) --- */
+    ENCRYPTION_DATA_UNDES               = 0x17,     /* UNDES 8-byte key    */
+    ENCRYPTION_DATA_3UNDES_16 	        = 0x38,     /* 3-UNDES 16-byte key */
+    ENCRYPTION_DATA_3UNDES_24           = 0x39,     /* 3-UNDES 24-byte key */
+
+    ENCRYPTION_DATA_MASTER_UNDES        = 0x1C,     /* UNDES 8-byte key,    8  bytes Working Key */
+    ENCRYPTION_DATA_MASTER_3UNDES       = 0x3C,     /* 3-UNDES 16-byte key, 16 bytes Working Key */
+
+    /* --- DATA BLOCK --- */
+    ENCRYPTION_DATA_BLOCK               = 0x18,     /* Global Data Block encryption */
+
+    /* --- IRREVERSIBLE PIN --- */
+    ENCRYPTION_IRREVERSIBLE_PIN_DES     = 0x1A,     /* DES 8-byte key (equal to PIN Block) */
+    ENCRYPTION_IRREVERSIBLE_PIN_3DES    = 0x3A,     /* 3-DES 16-byte key */
+
+    /* --- OWF - One Way Function --- */
+    ENCRYPTION_OWF_DES                  = 0x1D,     /* OWF DES 8-byte key    (for MAC or PIN Keys) */
+    ENCRYPTION_OWF_3DES                 = 0x3D,     /* OWF 3-DES 16-byte key (for MAC or PIN Keys) */
+
+    /* --- RSA --- */
+    ENCRYPTION_DATA_RSA                 = 0x50      /* RSA. (Currently NOT AVAILABLE) */
+
+#ifdef _ARM
+    , ENCRYPTION_MAX                    = 0xFF      /* Maximum size - 1 byte */
+#endif
+} E_EncryptionType;
+
+
+/***************************
+    ENCRYPTION STRUCTURES
+ ***************************/
+
+/* DES Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                Key[ENCRYPTR_KEY_LEN];
+} S_Encryptr_DesKey;
+
+/* 3 DES 16 Bytes Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                Key[ENCRYPTR_KEY_LEN_3DES16];
+} S_Encryptr_3DesKey16;
+
+/* 3 DES 24 Bytes Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                Key[ENCRYPTR_KEY_LEN_3DES24];
+} S_Encryptr_3DesKey24;
+
+/* DES Result Key Structure */
+typedef packed struct
+{
+    byte                EncryptedBlock[ENCRYPTR_RESULT_LEN];
+} S_Encryptr_DesResult;
+
+
+/* DUKPT Init Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                SerialNum[ENCRYPTR_DUKPT_SERIAL_NUM_LEN];
+    byte                InitKey[ENCRYPTR_KEY_LEN];
+} S_Encryptr_DukptInitKey;
+
+/* DUKPT Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                SerialNum[ENCRYPTR_DUKPT_SERIAL_NUM_LEN];      
+    byte                Key[ENCRYPTR_DUKPT_KEYS_DB_SIZE] [ENCRYPTR_DUKPT_KEY_LEN];            
+} S_Encryptr_DukptKey;                      
+
+/* DUKPT 3DES Init Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                SerialNum[ENCRYPTR_DUKPT_SERIAL_NUM_LEN];
+    byte                InitKey[ENCRYPTR_KEY_LEN_3DES16];
+} S_Encryptr_Dukpt3DesInitKey;
+
+/* DUKPT 3DES Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;
+    byte                SerialNum[ENCRYPTR_DUKPT_SERIAL_NUM_LEN];      
+    byte                Key[ENCRYPTR_DUKPT_KEYS_DB_SIZE] [ENCRYPTR_DUKPT_3DES_KEY_LEN];            
+} S_Encryptr_Dukpt3DesKey;                      
+
+/* DUKPT Result Key Structure */
+typedef packed struct
+{
+    byte                EncryptedBlock[ENCRYPTR_RESULT_LEN];
+    byte                SerialNum[ENCRYPTR_DUKPT_SERIAL_NUM_LEN];
+} S_Encryptr_DukptResult;
+
+
+/* Union of all Encryption structures. */
+typedef packed union
+{
+    S_Encryptr_DesKey           DesKey;
+    S_Encryptr_3DesKey16        Des3Key16;
+    S_Encryptr_3DesKey24        Des3Key24;
+
+    /* For DUKPT Encryption Algorithm */
+    S_Encryptr_DukptInitKey     DukptInitKey;
+    S_Encryptr_DukptKey         DukptKey;
+    S_Encryptr_Dukpt3DesInitKey Dukpt3DesInitKey;
+    S_Encryptr_Dukpt3DesKey     Dukpt3DesKey;
+
+    /* More Encryption Keys structures... */
+} U_Encryption_Key;
+
+
+/* DATA Result Structure */
+typedef packed struct
+{
+    byte XDATA_C51 *DataEncBlock;
+    usint           DataEncBlockLen;
+} S_Encryptr_DataResult;
+
+/* MAC with Chained Data Result Structure */
+typedef packed struct
+{
+    byte    EncryptedBlock[ENCRYPTR_RESULT_LEN];
+    byte    MacChained[ENCRYPTR_RESULT_LEN];
+} S_Encryptr_MacChainedResult;
+
+/* Union of all Encryption Result structures. Used for all DES and 3-DES based methods. */
+typedef packed union
+{
+    S_Encryptr_DesResult        DESResult;
+    S_Encryptr_DukptResult      DUKPTResult;
+    S_Encryptr_DataResult       DataResult;
+    S_Encryptr_MacChainedResult MacChainedResult;
+} U_Encryption_Result;
+
+
+/* PASSWORD Key Structure */
+typedef packed struct
+{
+    byte                HeaderSize;         /* == ENCRYPTR_KEY_HEADER_SIZE  */
+    E_EncryptionKeyType KeyType;            /* == ENCRYPTION_PASSWORD_KEY   */
+    byte                Password[ENCRYPTR_PASSWORD_LEN];
+    byte                PasswordLen; 		/* Current Password Length.     */
+    byte                MaxNumOfRetries;    /* If == 0, no limit of retries */
+    byte                NumOfRetries;       /* Current Num of Retries.      */
+} S_Encryptr_PasswordKey;
+
+
+/*********************************
+    PIN BLOCK FORMAT STRUCTURES
+ *********************************/
+
+/* Formats for Constructing Pin-Blocks. */
+typedef packed enum
+{
+    ENCRYPTR_PINBLOCK_BINARY          =    0,   /* Account must be 8-byte length    */
+    ENCRYPTR_PINBLOCK_4B              =    4,   /* Banesto-4B Format                */
+    ENCRYPTR_PINBLOCK_ISO_FORMAT_0    =    5,   /* ISO 9564-1 Format 0              */
+    ENCRYPTR_PINBLOCK_ISO_FORMAT_1    =    6,   /* ISO 9564-1 Format 1              */
+    ENCRYPTR_PINBLOCK_ISO_FORMAT_3    =    8,   /* ISO 9564-1 Format 3              */
+
+    ENCRYPTR_PINBLOCK_DATA_BLOCK      = 0x80    /* DATA Block encryption            */
+
+#ifdef _ARM
+    , ENCRYPTR_PINBLOCK_MAX           = 0xFF    /* Maximum size: 1 byte             */
+#endif
+} E_Encryptr_PinBlockType;
+
+/* For backward compatibility */
+#define ENCRYPTR_PINBLOCK_PLAIN_TEXT    ENCRYPTR_PINBLOCK_ISO_FORMAT_0
+
+
+/* Banesto-4B Pin Block Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *RandomNo;
+    byte             RandomNoLen;
+    byte             PinLen;
+} S_Encryptr_PinBlock4B;
+
+/* ANSI/DUKPT Pin Block Format 0 Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *Account;
+    byte             AccountLen;
+    byte             PinLen;
+} S_Encryptr_PinBlockPlainText;
+
+/* DES/3DES Master Session Input Format 0 Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *Account;
+    byte             AccountLen;
+    byte             PinLen;
+    byte XDATA_C51  *WorkingKey;
+} S_Encryptr_MasterSessionInBlk;
+
+/* DES/3DES Pin Block Plain Text (Format 0, 1 and 3) Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *Account;    /* Not used in Format 1 */
+    byte             AccountLen;
+    byte             PinLen;
+    byte XDATA_C51  *WorkingKey; /* Working Key: 8 or 16 bytes exactly. (In case of Master/Session)                     */
+    byte XDATA_C51  *Filler;     /* Not used in Format 0. Unique value. If NULL, will be randomly filled by the NOS     */
+    byte             FillerLen;  /* Not used in Format 0. If greater than 5, content is the 5 left-most bytes of Filler */
+} S_Encryptr_PinBlockIsoFormatInBlk;
+
+/* MAC ANSI Session Input Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *PrevMAC;       /* 8-byte or NULL if not used (e.g in first packet)         */
+    byte XDATA_C51  *Data;          /* ASCII or Binary data, length see DataLen                 */
+    usint            DataLen;       /* Maximum: 800 bytes on ARM, 512 bytes on ATM              */
+    byte XDATA_C51  *WorkKeyIn;     /* Working Key: 8 or 16 bytes exactly                       */
+    byte XDATA_C51  *SecondKeyName; /* Optional Process: Name of Second Key - 8 bytes           */
+    byte             ProcessCode;   /* 0 - last packet, 1 - initial/middle, 2 - Chained Data    */
+    byte             KindOfMAC;     /* MAC 9609 ->  ASCII  data -> 0 or 1 
+                                                    Binary data -> 2 or 3
+                                       ANSI X9  ->  ASCII  data -> 4 or 5
+                                                    Binary data -> 6 or 7                       */
+} S_Encryptr_MacAnsiInBlk;
+
+/* Data DES/3DES Encryption Input Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *Data;          /* 8-byte ONLY  */
+} S_Encryptr_DataInBlk;
+
+/* Data Master Session DES/3DES Encryption Input Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51  *Data;          /* 8-byte ONLY  */
+    byte XDATA_C51  *WorkingKey;    /* Working Key: 8 or 16 bytes exactly */
+} S_Encryptr_DataMasterSessionInBlk;
+
+/* Data Block DES/3DES Encryption Input Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51     *Data;
+    usint               DataLen;    /* Maximum: 512 bytes                           */
+    E_EncryptionType    EncType;    /* One of the different DATA Encryption Types   */
+    byte XDATA_C51     *WorkingKey; /* Working Key: 8 or 16 bytes exactly           */
+} S_Encryptr_DataBlockInBlk;
+
+
+/* Adjust Parity algorithm. */
+typedef packed enum
+{
+    ENCRYPTR_NO_PARITY          = 0,        /* No Parity Adjustment requested */
+    ENCRYPTR_PARITY_LSb_ODD,                /* APACS 40 Standard              */
+    ENCRYPTR_PARITY_LSb_EVEN
+} E_Encryptr_AdjustParity;
+
+/* OWF DES/3DES Encryption Input Format Structure. */
+typedef packed struct
+{
+    byte XDATA_C51             *Data;           /* 8-byte ONLY          */
+    byte XDATA_C51             *X;              /* 8-byte ONLY          */
+    byte XDATA_C51             *Y;              /* 8 or 16 byte exactly */
+    E_Encryptr_AdjustParity     AdjustParity;
+} S_Encryptr_OWFInBlk;
+
+
+/* Union of all Pin-Block format structures. */
+typedef packed union
+{
+    S_Encryptr_PinBlock4B               B4BInBlk;           /* Banesto-4B                       */
+    S_Encryptr_PinBlockPlainText        PlainTextInBlk;     /* ISO Format 0                     */
+    S_Encryptr_MasterSessionInBlk       MasterSessInBlk;    /* ISO Format 0 Master / Session    */
+    S_Encryptr_PinBlockIsoFormatInBlk   IsoFormatInBlk;     /* ISO Format 0,1 or 3              */
+    S_Encryptr_MacAnsiInBlk             MacAnsiInBlk;
+    S_Encryptr_DataInBlk                DataInBlk;
+    S_Encryptr_DataMasterSessionInBlk   DataMasterSessInBlk;
+    S_Encryptr_DataBlockInBlk           DataBlockInBlk;
+    S_Encryptr_OWFInBlk                 OWFInBlk;
+   /* More formats... */
+} U_Encryptr_InputBlock;
+
+
+/*************************************
+    KEYS DIVERSIFICATION STRUCTURES
+ *************************************/
+
+/* Diversification Types - First byte of Key Diversification Parameters Structure */
+typedef packed enum
+{
+    ENCRYPTR_DIVERSIFY_ENCRYPT      = 0,    /* DES / 3-DES encryption                                          */
+    ENCRYPTR_DIVERSIFY_SWAP_ENCRYPT_3DES,   /* Swap Key, then DES / 3-DES encrypt (valid only for 3-DES keys)  */
+    ENCRYPTR_DIVERSIFY_SPLIT_3DES_KEY,      /* Split a 3-DES key (16-byte) in 2 different DES keys (8-byte)    */
+    ENCRYPTR_DIVERSIFY_OWF,                 /* One-Way-Function diversification                                */
+    ENCRYPTR_DIVERSIFY_APACS40,             /* "Key Register" Derivation according to APACS 40 Standard        */
+    ENCRYPTR_DIVERSIFY_RACAL_MODE_X_3DES    /* Key Derivation according to RACAL "Mode X" Standard             */
+
+#ifdef _ARM
+    , ENCRYPTR_DIVERSIFY_TYPE_MAX   = 0xFF  /* Maximum size: 1 byte */
+#endif
+} E_Encryptr_DiversificationType;
+
+
+/* Fixed Key Diversification Parameters Structure. (Used for DES / 3-DES encryption diversification) */
+typedef packed struct
+{
+    E_Encryptr_DiversificationType    DiversificationType;
+    E_EncryptionKeyType	              DiversifyKeyType;
+    byte XDATA_C51                  *pDiversifyKeyName1;    /* Max 8 byte  */
+    byte XDATA_C51                  *pDiversifyKeyName2;    /* Max 8 byte  */
+    byte XDATA_C51                  *pData1;                /* 8-byte ONLY */
+    byte XDATA_C51                  *pData2;                /* 8-byte ONLY */
+} S_Encryptr_DiversifyFixedKeyPrms;
+
+/* OWF Diversification Parameters Structure. */
+typedef packed struct
+{
+    E_Encryptr_DiversificationType  DiversificationType;
+    byte XDATA_C51                 *pData;                  /* 8-byte ONLY          */
+    byte XDATA_C51                 *pX;                     /* 8-byte ONLY          */
+    byte XDATA_C51                 *pY;                     /* 8 or 16 byte exactly */
+    E_Encryptr_AdjustParity         AdjustParity;
+} S_Encryptr_DiversifyOWFKeyPrms;
+
+/* APACS 40 "Key Register" Derivation Parameters Structure. */
+typedef packed struct
+{
+    E_Encryptr_DiversificationType   DiversificationType;
+    byte XDATA_C51                  *pMACKeyName;           /* Max 8 byte  */
+    byte XDATA_C51                  *pPINKeyName;           /* Max 8 byte  */
+    byte XDATA_C51                  *pA;                    /* 4-byte ONLY */
+    byte XDATA_C51                  *pB;                    /* 4-byte ONLY */
+    byte XDATA_C51                  *pC;                    /* 4-byte ONLY */
+    byte XDATA_C51                  *pD;                    /* 4-byte ONLY */
+} S_Encryptr_DiversifyAPACS40KeyPrms;
+
+/* RACAL "Mode X" Diversification Parameters Structure. */
+typedef packed struct
+{
+    E_Encryptr_DiversificationType   DiversificationType;
+    E_EncryptionKeyType	             DiversifyKeyType;
+    byte XDATA_C51                 *pDiversifyKeyName;      /* Max 8 byte   */
+    byte XDATA_C51                 *pData;                  /* 16-byte ONLY */
+} S_Encryptr_DiversifyRacalModeXKeyPrms;
+
+
+/* Union of all Key Diversification Parameters Structure */
+typedef packed union
+{
+    S_Encryptr_DiversifyFixedKeyPrms        DiversifyFixedKey;
+    S_Encryptr_DiversifyOWFKeyPrms          DiversifyOWFKey;
+    S_Encryptr_DiversifyAPACS40KeyPrms      DiversifyAPACS40Key;
+    S_Encryptr_DiversifyRacalModeXKeyPrms   DiversifyRacalModeXKey;
+   /* More Standards... */
+} U_Encryptr_DiversifyKeyPrms;
+
+
+#endif

@@ -1,0 +1,31 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   TOUCH.DEF                                                   *
+ *                                                                          *
+ * MODULE NAME: TOUCH                                                       *
+ *                                                                          *
+ * PROGRAMMER:  Rami Rosenbaum                                              *
+ *                                                                          *
+ * DESCRIPTION: Touch panel driver - Module Structures.                     *
+ *                                                                          *
+ ****************************************************************************/
+
+#ifndef __TOUCH_DEF__
+#define __TOUCH_DEF__
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+/* Touch-Panel point */
+typedef struct
+{
+  usint  X;  /* Horizontal */
+  usint  Y;  /* Vertical   */
+  
+} Point;
+
+
+
+#endif __TOUCH_DEF__

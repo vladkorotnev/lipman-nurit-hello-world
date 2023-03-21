@@ -1,0 +1,57 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   RdioTgts.PRM                                                *
+ *                                                                          *
+ * MODULE NAME: ComHndler                                                   *
+ *                                                                          *
+ * PROGRAMMER:  Avishai                                                     *
+ *                                                                          *
+ * DESCRIPTION: Radio Targets parameters                                    *
+ *                                                                          *
+ * REVISION:    01.01 14/06/94                                              *
+ *                                                                          *
+ * HISTORY:     none                                                        *
+ *                                                                          *
+ ****************************************************************************/
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+          /*=============================================================*
+           *               I N T R O D U C T I O N                       *
+           *=============================================================*/
+
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+#ifndef __RDIOTGTS
+#define __RDIOTGTS
+
+
+          /*=============================================================*
+           *                 D E F I N I T I O N S                       *
+           *=============================================================*/
+
+#define RADIO_PARAMS "RADIO "   /* this is the block name  */
+
+          /*=============================================================*
+           *       T Y P E  &  S T R U C T    D E C L A R A T I O N      *
+           *=============================================================*/
+#ifndef CENTER_MMI
+
+typedef  struct
+      /*  The parameters are an array of this structure */
+{
+   ulint HostRadioAddr;         /* send to network address (MAN) */
+   usint RadioTimeout;          /* timeout in seconds            */
+
+} RadioParamType;
+
+#endif
+
+#endif
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

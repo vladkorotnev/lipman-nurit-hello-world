@@ -1,0 +1,70 @@
+#include dlmlinkr_def
+
+#define APPLICATION_HEADER_SIZE		 64
+
+#define APPLICATION_HEADER_SIGNATURE_SIZE 8
+
+
+#define APPLICATION_HEADER_NAME_SIZE     16
+
+#define APPLICATION_HEADER_VER_SIZE	  5
+
+#define APPLICATION_HEADER_MODEL_SIZE	  8  /* File name */
+
+#define APPLICATION_HEADER_DATE_SIZE	  8
+
+#define APPL_ARM_SIGNATURE "LipApARM"
+#define APPL_68_SIGNATURE "LipApp"
+
+#ifdef _ARM
+  #define APPL_SIGNATURE  APPL_ARM_SIGNATURE
+#else
+  #define APPL_SIGNATURE  APPL_68_SIGNATURE
+#endif
+
+#ifdef __WIN32__
+#pragma option -a1   /*set byte alignement*/
+#endif
+typedef packed struct application_header
+{
+   char   signature[8];
+   ulint  size_of_appl_statics;		      	   /* address (4)	*/
+   char   nos_ver  [APPLICATION_HEADER_VER_SIZE];  /* min.NOS version VV.VV (5)	*/
+   char   appl_name[APPLICATION_HEADER_NAME_SIZE]; /* string  (16)	*/
+   char   appl_ver [APPLICATION_HEADER_VER_SIZE];  /* VV.VV   (5)	*/
+   char   appl_file_name[APPLICATION_HEADER_MODEL_SIZE];
+						   /* "xxxxxxxx".S19 (8)*/
+   char   date[APPLICATION_HEADER_DATE_SIZE];      /* dd.mm.yy(8)	*/
+   byte   NewFormat;                               /* If the new Format header
+						      then equ 0 else equ 'C' */
+   byte   NumOfDlms;				   /* Number of used Dlms */
+   DLMEntryData  *DlmEntrysPtr;			   /* Relative pointer to the DlmEntrys */
+   byte   industry_types;/* bitwise  OR of available industry types:
+			    (1 << ( RETAIL_TYPE        - 1 ),  ( =  1 )
+			    (1 << ( RESTAURANT_TYPE    - 1 ),  ( =  2 )
+			    (1 << ( DIRECT_MARKET_TYPE - 1 ),  ( =  4 )
+			    (1 << ( RENTAL_TYPE        - 1 ),  ( =  8 )
+			    (1 << ( LODGING_TYPE       - 1 ),  ( = 16 )
+				    SCRIPT_MACHINE | 128,
+				    CANADA_RC      | 128
+		      Note: Definition of industry types are in POSMMI_4.PRM
+			    See file PROTGEN_4.DEF also.
+			    128 = (1<<(SPECIFIC_MARKET-1)) = (1 << 7) */
+
+   byte   protocol_type;/* this value use if ( (industry_types & 128) != 0)
+       If an application is for Specific Market than protocol_type in this
+       application_header shows exactly what industry type should be written
+       in industry_type in protocol header. */
+   byte   Spare[2];
+}
+ application_header;
+#ifdef __WIN32__
+#pragma option -a.   /*set byte alignement*/
+#endif
+
+#define RETAIL_AVAILABLE         1 << (RETAIL_TYPE	  - 1)
+#define RESTAURANT_AVAILABLE     1 << (RESTAURANT_TYPE	  - 1)
+#define RENTAL_AVAILABLE         1 << (RENTAL_TYPE	  - 1)
+#define LODGING_AVAILABLE        1 << (LODGING_TYPE	  - 1)
+#define DIRECT_MARKET_AVAILABLE  1 << (DIRECT_MARKET_TYPE - 1)
+

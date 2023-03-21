@@ -1,0 +1,163 @@
+/************************************************
+ * FILE NAME:   GSMRADIO.PRM
+ * MODULE NAME: GSMRADIO
+ * PROGRAMMER:  Oren Sokoler
+ * DESCRIPTION: GSM (AT) radio modem.
+ * REVISION:    25/05/2000
+ ************************************************/
+
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+   /*=======================================*
+    *   I N T R O D U C T I O N             *
+    *=======================================*/
+
+#include liptypes_def
+
+#ifndef __GSMRADIO_PRM
+#define __GSMRADIO_PRM
+
+
+   /*=======================================*
+    *   D E F I N I T I O N S               *
+    *=======================================*/
+
+
+#define         GSM_RADIO_PARAM          "ATGSMP"
+#define         GSM_TARGET_PARAM         "ATTGSM"
+
+#define         GSM_MAX_PHONE_NUM       19   /* Maximum digits in phone number */
+#define         GSM_MAX_APN_LEN         255  /* Maximum chars for APN */
+
+#define         GSM_CALL_DATA            0
+#define         GSM_CALL_VOICE           1
+#define         GSM_CALL_GPRS            2
+#define         GSM_CALL_GPRS_LONG_APN   3
+
+#define         GSM_NOS_PIN_CTRL         0   /* NOS controls PIN entry         */
+#define         GSM_APPL_PIN_CTRL        1   /* Application controls PIN entry */
+
+#define         GSM_UNUSED_PARAM_VAL    -1   /* signifies unused value for GSMRadioParamStruct */
+#define         GSM_RESET_PARAM_VAL     -2   /* assigns unused int value for GSMRadioParamStruct */
+#define         GSM_RESET_PARAM_STR     0xFF /* assigns unused str value for GSMRadioParamStruct */
+
+  /*
+   *
+   * Below are all the possible connection speeds (bps) when calling POTS systems
+   *
+   */
+
+#define         GSM_AUTOBAUD            0     /* autobauding                 */
+#define         GSM_300_V21             1     /* 300 bps (V.21)              */
+#define         GSM_1200_V22            2     /* 1200 bps (V.22)             */
+#define         GSM_1200_V23            3     /* 1200/75 bps (V.23)          */
+#define         GSM_2400_V22BIS         4     /* 2400 bps (V.22bis)          */
+#define         GSM_2400_V26TER         5     /* 2400 bps (V.26ter)          */
+#define         GSM_4800_V32            6     /* 4800 bps (V.32)             */
+#define         GSM_9600_V32            7     /* 9600 bps (V.32)             */
+#define         GSM_UNKNOWN             8     /* unknown or network specific */
+#define         GSM_7200_V32BIS         9     /* 7200 bps (V.32bis)          */
+#define         GSM_12000_V32BIS        10    /* 12000 bps (V.32bis)         */
+#define         GSM_14400_V32BIS        11    /* 14400 bps (V.32bis)         */
+#define         GSM_9600_V34            12    /* 9600 bps (V.34)             */
+#define         GSM_12000_V34           13    /* 12000 bps (V.34)            */
+#define         GSM_14400_V34           14    /* 14400 bps (V.34)            */
+#define         GSM_19200_V34           15    /* 19200 bps (V.34)            */
+#define         GSM_28800_V34           16    /* 28800 bps (V.34)            */
+#define         GSM_300_V110            65    /* 300 bps (V.110)             */
+#define         GSM_1200_V110           66    /* 1200 bps (V.110)            */
+#define         GSM_2400_V110           68    /* 2400 bps (V.110)            */
+#define         GSM_4800_V110           70    /* 4800 bps (V.110)            */
+#define         GSM_9600_V110           71    /* 9600 bps (V.110)            */
+#define         GSM_12000_V110          74    /* 12000 bps (V.110)           */
+#define         GSM_14400_V110          75    /* 14400 bps (V.110)           */
+#define         GSM_19200_V110          79    /* 19200 bps (V.110)           */
+#define         GSM_38400_V110          81    /* 38400 bps (V.110)           */
+
+   /* ======================================*
+    *    T Y P E	D E C L A R A T I O N	*
+    * ======================================*/
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ * There is one block of the following struct  *
+ * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                               *
+ * NOTE : If a parameter of the following structure does not have to be changed, *
+ *        use the value GSM_UNUSED_PARAM_VAL if the field is sint or an empty    *
+ *        string ("") if the field is a char/byte , e.g. if you dont want to     *
+ *        set the ReSeqPeriodT4 field set it to GSM_UNUSED_PARAM_VAL.            *
+ *        In addition, if a parameter of the following structure needs to be     *
+ *        cleared\reset use the value GSM_RESET_PARAM_VAL if the field is sint   *
+ *        or use the value GSM_RESET_PARAM_STR if the field is a char/byte,      *
+ *        e.g. if you want to clear\reset the the ReSeqPeriodT4 field            *
+ *        set it to GSM_RESET_PARAM_VAL.                                         *
+ *                                                                               *
+ *                                                                               *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+typedef packed struct {     
+                             /* sizeof (AtRadioParamStruct) = 192     */
+
+   sint FirstOctet;          /* First octet                           */
+   sint ValidityPeriod;      /* for SM to be valid                    */
+   sint ProtocolID;          /* higher layer protocol                 */
+   sint SMDataCodingScheme;  /* Data Coding Scheme of messages        */
+
+   sint USSDataCodingScheme; /* Data Coding Scheme of messages        */
+
+   sint InterWorkingWinSize; /* window size                           */
+   sint MobileWinSize;       /* window size                           */
+   sint AckTimerT1;          /* Acknowledgment timer                  */
+   sint ReTransAtmptN2;      /* Re-transmission attempts              */
+   sint RLPVerNum;           /* RLP version number                    */
+   sint ReSeqPeriodT4;       /* re-sequencing period in units of 10ms */
+
+   sint PswdControlFlag;     /* NOS\APPL handling passwords :         */                                 
+                             /* GSM_NOS_PIN_CTRL / GSM_APPL_PIN_CTRL  */
+
+   char PIN[9];              /* SIM PIN number                        */
+   char PUK[8];              /* SIM PUK number                        */
+   char PH_SIM[8];           /* SIM PH_SIM number                     */
+   char PIN2[9];             /* SIM PIN2 number                       */
+   char PUK2[8];             /* SIM PUK2 number                       */
+   
+   char SCAddr[21];          /* SMSC address                          */
+
+   char CHSET[17];           /* character set schema being used by TE */
+
+   byte Reserved[88];        /* Reserved for future usage             */
+
+} GSMRadioParamStruct;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * There is one or more blocks (referenced by index) of the following struct *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+typedef  struct
+{
+   char     LineTelephoneNumber[GSM_MAX_PHONE_NUM+1]; /* null terminated string */
+                                                      /* Phone number for GSM   */
+                                                      /* Accsses Point Name for GPRS */
+   byte     Rate;                          /* See above definitions             */
+                                           /* GSM_AUTOBAUD for GPRS */
+
+   byte     TimeOut;                       /* in seconds. default equal 45.     */
+   byte     NumberOfAttempts;              /* from 1 to 255. default equal 3.   */
+   byte     CallType;                      /* GSM call type                     */
+                                           /* GSM_CALL_GPRS for GPRS */
+   byte     Reserved[4];                   /* Reserved for future usage         */
+   usint    APNSize;                       /* Size for the APN string */
+   byte     Pedding;                       /* for even location of the APNSize  */
+   byte     FirstByteOfAPN;                /* First byte of the APN string */
+
+} GSMTargetParamStruct;                    /* sizeof(AtTargetParamStruct) = 32  */
+
+
+#endif
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

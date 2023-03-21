@@ -1,0 +1,72 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   seckb.def                                                   *
+ *                                                                          *
+ * MODULE NAME: SecureKb                                                    *
+ *                                                                          *
+ * PROGRAMMER:  Rami Rosenbaum                                              *
+ *                                                                          *
+ * DESCRIPTION: Master part of the SecureKb module (see SecKb.doc).         *
+ *              Manages the Slave in the process of obtaining an encrypted  *
+ *              Pin # from the user.                                        *
+ *                                                                          *
+ * REVISION:    01.00                                                       *
+ *                                                                          *
+ ****************************************************************************/
+
+
+        /* ======================================= *
+         *     T Y P E   D E C L A R A T I O N     *
+         * ======================================= */
+
+/* States of modules SecureKb Master & SecureKb Slave. */
+typedef packed enum
+{
+    SECKB_STATE_IDLE                = 1,
+    SECKB_STATE_GET_PIN             = 2,
+    SECKB_STATE_PIN_OBTAINED        = 3,
+    SECKB_STATE_ENCRYPT             = 4,
+    SECKB_STATE_ENCRYPTION_READY    = 5
+} SecKbState;
+
+/* Module return values: */
+packed enum
+{
+   /* General return values */
+    SECKB_OK                            =   0,
+    SECKB_ERROR                         =  -1,
+    SECKB_FATAL_ERROR                   =  -2,
+    SECKB_NULL_ASSIGNMENT               =  -3,    /* NULL given as pointer. */
+    SECKB_PARAM_ERROR                   =  -4,    /* Error in a parameter. */
+                                        
+    /* Secure KB State Machine */       
+    SECKB_NOT_READY                     =  -5,    /* Data-Encryption is not ready. */
+    SECKB_BUF_TOO_SHORT                 =  -6,    /* Buffer is too short for Data. */
+    SECKB_STATE_ERROR                   =  -7,    /* Wrong state for request. */
+    SECKB_PIN_TOO_OFTEN                 =  -8,    /* Too many PIN attempts. */
+    SECKB_PIN_LEN_MISMATCH              =  -9,    /* PIN Length mismatch. */
+                                        
+    /* Other errors return values */    
+    SECKB_ENCRYPTR_KEY_TYPE_ERROR       = -41,    /* Encryption with wrong Key Type. */
+    SECKB_KEYDB_ERROR                   = -43,    /* Error in module KeyDB. */
+                                        
+    SECKB_ENCRYPTION_ERROR              = -55,    /* Error occured during Encryption process. */
+    SECKB_ENCRYPTION_DUKPT_PINPAD_END   = -56,    /* In DUKPT: current encrypted PIN block is OK, 
+                                                               but next PIN encryption will exceed 1 million. */
+    SECKB_ENCRYPTION_DUKPT_COUNT_EMPTY  = -57,    /* In DUKPT: PIN encryption has exceeded 1 million iterations. */
+    SECKB_ENCRYPTR_PINBLOCK_TYPE_ERROR  = -58,    /* Encryption with not supported PIN Block Type. */
+
+    SECKB_SECURITY_MISMATCH             = -60     /* Problem with Key Transport Key, or any Security incompatibility. */
+};
+
+/* Specific structure for Verify ICC Off Line PIN */
+typedef packed struct
+{
+   void    *pIccStruct; /* This is a pointer to an IccInstructStruct as defined in the IccTrans.h file */
+   byte     InPinLen;
+   boolean  EncryptPin;
+   byte    *pChallenge;
+   byte    *pRSAKey;
+   byte    *pIccCmdStatus;
+} S_SecKb_IccPin;
+

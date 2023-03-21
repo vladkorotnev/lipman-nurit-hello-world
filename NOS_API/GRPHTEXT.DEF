@@ -1,0 +1,130 @@
+/****************************************************************************
+ * FILE NAME:   GrphText.def                                                *
+ * MODULE NAME: GrphText                                                    *
+ * PROGRAMMER:  Ephraim Ben-Ishai                                           *
+ * DESCRIPTION: public defines, types, variables, function prototypes       *
+ *              API functions declarations                                  *
+ ****************************************************************************/
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+#ifndef __GrphText_DEF
+  #define __GrphText_DEF
+
+
+/*
+1. Formats the display into lines.
+   The display is defined by its columns and rows. The user can then divide
+   the rows of pixels into lines. The lines size determins the font type that
+   is permitted to be written on that line. For example if line one is defined
+   as 14 pixels then all three font types can be written to that line. If line
+   two is defined as 9 pixels then, only the 7X5 font can be written.
+
+   If the user only wants to define two line sizes line one header and the
+   rest all the same size then, only the first two lines need to be given
+   to the _FORMAT function with a contiuatin code the function will then
+   create the remainder of the lines based on the line before the ETC code.
+
+2. Creates popups based on lines.
+   PopUps are created base on a row,col point the width (columns)of the
+   window, and the number of lines in the window. Once a window is formed
+   then all the functions in this module assume the new WORLD. For example
+   if _CLS is used then only the window will be cleared. When writting
+   to Line one this will correspond to line one in the window and
+   the offset based from the begining of the window.
+
+6. Set cursor attruibutes and position.
+   The cursor is definined to be blinking or not, visible or not, per font
+   type and thickness 1/2/3 lines. These parameters are set at any time by
+   the user.
+
+7. Activates the cursor on the display.
+   An interupt driven routine _CURSORCONNECT is called every 1/2 sec. This
+   routine uses the cursor attributes listed above and preformes them.
+
+8. The cursor can be moved to any location with-in the current world by
+   defining the line and offset. The user can also determine the location
+   of the cursor at any given time.*/
+          /*==========================================*
+           *           I N C L U D E S                *
+           *==========================================*/
+
+/*#include display_h*/
+#include colors_def
+#include grphdisp_def
+
+          /*==========================================*
+           *         P A R A M E T E R S              *
+           *==========================================*/
+/* void */
+
+	  /*==========================================*
+	   *           D E F I N I T I O N S          *
+	   *==========================================*/
+
+/* define space between lines for fonts */
+
+#define  SPACE_FOR_7X5          6
+#define  SPACE_FOR_10X7         6   /*CHANGED FROM 9*/
+#define  SPACE_FOR_14X10       12
+#define  SPACE_FOR_16X8         8
+#define  SPACE_FOR_16X16_WORDS 16
+#define  SPACE_FOR_8X8          8
+#define  SPACE_FOR_10X7BOLD    12
+#define  SPACE_FOR_13X7         8
+/* define format of screen for fonts */
+
+#define  FORMAT_FOR_7X5           9
+#define  FORMAT_FOR_10X7         11
+#define  FORMAT_FOR_14X10        16
+
+#define  FORMAT_FOR_16X8         16
+#define  FORMAT_FOR_16X16_WORDS  16
+#define  FORMAT_FOR_8X8           8
+#define  FORMAT_FOR_13X7         13
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+typedef struct
+{
+  byte Bytes;       /* size of the pattern in bytes (in table) */
+
+  byte Width;       /* width of the pattern in pixels */
+  byte XSpace;      /* horizontal space between any 2 characters */
+  byte SiteWidth;   /* Width+XSpace                   */
+
+  byte Height;      /* height of pattern in pixels */
+  byte YSpace;      /* vertical space between any 2 line */
+  byte SiteHeight;  /* Height+YSpace                  */
+
+  byte spare1;      /* for future use */
+} TFont;
+
+typedef enum
+{
+  MOVE_UP,
+  MOVE_DOWN,
+  MOVE_LEFT,
+  MOVE_RIGHT,
+  MOVE_LEFT_UP,
+  MOVE_LEFT_DOWN,
+  MOVE_RIGHT_UP,
+  MOVE_RIGHT_DOWN,
+} TMoveImage;
+
+typedef struct
+{
+  char  *str;       /*ASCII (or UNICODE) text string (NULL-terminated) */
+  long   color;     /*foreground  color: display's default foreground, if >max color */
+  long   bkgr_color;/*background  color: display's default background, if >max color*/
+  byte   font;      /*font id to call Font_GetFont(id) with */
+  byte   format;    /*see SET_ #defines */
+} Text;
+
+
+#endif
+

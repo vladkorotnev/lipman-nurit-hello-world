@@ -1,0 +1,84 @@
+/****************************************************************************
+ * FILE NAME:  atmmenu.def
+ * MODULE NAME: atmmenu
+ * PROGRAMMER:  CL.
+ * DESCRIPTION: application main loop
+ * REVISION:    01.00
+ ****************************************************************************/
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+#ifndef __AtmMenu_DEF
+  #define __AtmMenu_DEF
+
+/** ***********************************************************
+ *                                ==============================
+                                  ||        t-i-t-l-e         ||
+                                  ||------------------------- ||
+                                  |||button[0]|   |button[4]| ||
+                                  ||----------- c ----------- ||
+                                  |||button[1]| e |button[5]| ||
+                                  ||----------- n ----------- ||
+                                  |||button[2]| t |button[6]| ||
+                                  ||----------- e ----------- ||
+                                  |||button[3]| r |button[7]| ||
+                                  ||------------------------- ||
+ *                                ||       f-o-o-t-e-r        ||
+ *                                ==============================
+ *****************************************************************/
+
+          /*==========================================*
+           *         P A R A M E T E R S              *
+           *==========================================*/
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+#define ATMMENU_BUTTONS         8
+#define ATMMENU_MAX_EXIT_EVENTS 8
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+typedef struct
+{
+  PanelStyle        ButtonStyle;
+  Event             ButtonKeys[ATMMENU_BUTTONS];
+  Event             Exits[ATMMENU_MAX_EXIT_EVENTS+1];
+  usint             CenterWidth;
+  long              FrameColorLight;
+  long              FrameColorDark;
+  byte              Reserved[6];/*must be all zeroes! */
+} AtmMenuOptions;
+
+typedef struct
+{
+  Icon         icon;                        /* if image=0 or text.str=0, will not be shown */
+  ButtonRetVal (*handler)(void *parameters);/*user function, ret value=TRUE
+                                              exits from the current context (menu) */
+  void        *parameters;
+} AtmMenuItem;
+
+typedef struct
+{
+  Icon         title;
+  Icon         center;
+  Icon         footer;
+  long         color;   /*items background color*/
+  usint        timeout; /*in sec, if ==0, then do not used */
+  AtmMenuItem  item[ATMMENU_BUTTONS];
+} AtmMenu;
+
+
+typedef struct
+{
+  AtmMenu          Menu;
+  AtmMenuOptions   Options;
+  boolean          ShowFrameFlag;
+}
+  AtmMenuEx;
+
+#endif

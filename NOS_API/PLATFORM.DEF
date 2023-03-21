@@ -1,0 +1,152 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   PLATFORM.DEF                                                *
+ *                                                                          *
+ * MODULE NAME: CONFIG           				            *
+ *                                                                          *
+ * PROGRAMMER:  Ephraim                                                     *
+ *                                                                          *
+ * DESCRIPTION: NURIT platform definition file.                             *
+ *                                                                          *
+ * REVISION:    01.00 08/08/01                                              *
+ *                                                                          *
+ ****************************************************************************/
+
+#ifndef  __NURIT_PLATFORM_DEF__
+  #define __NURIT_PLATFORM_DEF__
+
+	  /*==========================================*
+	   *      T Y P E   D E C L A R A T I O N     *
+	   *==========================================*/
+
+#define _NURIT_TERMO_384  _NURIT_LTP1245
+#define _NURIT_TERMO_576  _NURIT_LTP2342
+typedef enum
+{
+   _NURIT_NO_PRINTER=0,
+   _NURIT_LTP1245,    /* 384 pixels in line, 8 dots per mm*/
+   _NURIT_LTP2342,    /* 576 pixels in line, 8 dots per mm*/
+   _NURIT_LTP245A,    /* 384 pixels in line, 8 dots per mm, easy load*/
+   _NURIT_LTPZ245,    /* 384 pixels in line, 8 dots per mm, low cost*/
+   _NURIT_LTPZ245A,   /* 384 pixels in line, 8 dots per mm, easy load, low cost*/
+}PrintersEnum;
+
+typedef enum
+{
+   _NURIT_NO_COM_PORT=0,
+   _NURIT_RS232_PORT,   /* include Tx, Rx, RTS and CTS*/
+   _NURIT_RS485_PORT
+}ComPortsEnum;
+
+typedef enum
+{
+   _NURIT_NO_RADIO=0,
+   _NURIT_MOBITEX_RADIO,
+   _NURIT_DATATACK_RADIO,
+   _NURIT_GSM_RADIO,
+   _NURIT_CDPD_RADIO,
+   _NURIT_AMPS_RADIO,
+   _NURIT_CDMA_RADIO
+}RadioNetEnum;
+
+typedef enum
+{
+   _NURIT_LOCAL_NO_RADIO=0,
+   _NURIT_LOCAL_BT_RADIO,
+   _NURIT_LOCAL_WF_RADIO
+}LocalRadioEnum;
+
+
+
+#define  CONFIG_PLATFORM_VERSION 2
+
+/* all memory size in bytes */
+typedef struct
+{
+  usint   StructVer;   /* Structur version MUST set to CONFIG_PLATFORM_VERSION */
+  usint   ProductCode; /* NURIT number: 272, 2085, 3000, 3010, 3020, 8000 ... */
+  lipver  NosVers;     /* Full NOS version */
+
+  ulint   BuiltInModemMaxBaud; /* =0, if doesn't exist */
+
+  byte    RadioNetType;  /* see RadioNetEnum */
+
+  byte    IsTouchScreen;   /* =0, if doesn't exist (for NOS v.7 only)*/
+
+  byte    IsTrack1;        /* =0, if doesn't exist */
+  byte    IsTrack2;        /* =0, if doesn't exist */
+  byte    IsTrack3;        /* =0, if doesn't exist */
+
+  byte    IsExCard;    /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam1;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam2;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam3;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam4;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam5;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam6;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam7;      /* =0, if doesn't exist (for NOS v.7 only)*/
+  byte    IsSam8;      /* =0, if doesn't exist (for NOS v.7 only)*/
+
+  byte    PinPadPort;      /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_A;       /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_B;       /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_C;       /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_D;       /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_E;       /* see ComPortsEnum  (for NOS v.7 only)*/
+  byte    ComPort_F;       /* see ComPortsEnum  (for NOS v.7 only)*/
+
+  byte    IsRTC;           /* =0, if doesn't exist */
+
+  byte    IRDA_Port;       /* =0, if doesn't exist (for NOS v.7 only)*/
+
+  byte    LAN_Port;        /* =0, if doesn't exist (for NOS v.7 only)*/
+
+  byte    PrinterType;  /* see PrintersEnum */
+  usint   PixelsPerPrinterLine;
+
+  byte    DispType;    /* =0 for standart alpha display, else graphic display */
+  byte    ColorType;   /* number of bits per pixel */
+  usint   MaxRows;     /* in characters for alpha display, in pixels for graphic display */
+  usint   MaxColumns;  /* in characters for alpha display, in pixels for graphic display */
+
+  ulint   FlashSize;        /*full flash size in device in bytes*/
+  ulint   MaxApplSize;      /* for traditional application */
+  ulint   MaxBlockSize;     /* Block area  */
+  ulint   MaxApplDataSize;  /* Application data area */
+
+  ulint   RamSize;          /* Ram size */
+  ulint   ApplRamSize;      /* Min memory for application static */
+
+  ulint   SecureDBSize;     /* 0 if not exist */
+  ulint   SetupDBSize;      /* 0 if not exist */
+  ulint   RamDiskSize;      /* 0 if not exist */
+  usint   RamDiskMaxNumOfFiles; /* Max number of files in Ramdisk */
+  usint   RamDiskMaxRecordSize; /* Max size for regular Ramdisk file (cluster size) */
+
+  ulint   FlashDiskSize;    /* 0 if not exist */
+  usint   FlashDiskMaxNumOfFiles;
+
+  ulint   EepromSize;        /* 0 if not exist */
+
+  ulint   FiscalRomSize;     /* 0 if not exist */
+
+  usint   BatCapacity;       /* 0 if not exist */
+
+  char    TerminalID[33];    /* Full terminal ID
+                                Teminal/board ID format:
+                                DDDDCCMMAHHHNNNNNNNNNNNN\0
+                                DDDD - 4 char of device name.
+                                CC   - country code (US,UK,TR .....).
+                                MM   - Model Code
+                                A    - Model Ver
+                                HHH  - 3 char of hardware model code.
+                                NNNNNNNNNNNNN - 12 characters of serial number.
+                                NUL terminated */
+  char    ProductDate[12];    /* Full terminal Product Date
+                                 DD/MM/YY NUL terminated */
+  byte    IsEthenetPort;      /* =0, if doesn't exist */
+  byte    IsMemoryCard;       /* =0, if doesn't exist */
+
+} NuritPlatform;                 
+
+#endif

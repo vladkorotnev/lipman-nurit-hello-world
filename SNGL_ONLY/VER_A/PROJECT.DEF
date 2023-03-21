@@ -1,0 +1,223 @@
+/*----  SYSTEM DEFINITIONS  ----*/
+
+#define PACKED _Packed
+#define packed _Packed
+
+/*--------------------------*/
+/*----  8000 NOS FILES  ----*/
+/*--------------------------*/
+#define NOS_WITH_DYNAMIC_FONT
+
+#define NOS_WITH_DYNAMIC_PRINTER_FONT
+
+
+#define   nos_h        "..\..\nos_api\nos.h"
+
+#define   liptypes_def "..\..\nos_api\liptypes.def"
+#define   LIPTYPES_DEF liptypes_def
+
+#define   ramdisk_h    "..\..\nos_api\ramdisk.h"
+#define   RAMDISK_H    ramdisk_h
+
+#define   nurit_def    "..\..\nos_api\nurit.def"
+#define   NURIT_DEF    nurit_def
+
+#define   dialtgts_prm "..\..\nos_api\dial_3.prm"
+#define   DIALTGTS_PRM dialtgts_prm
+#define   DIAL_3_PRM   dialtgts_prm
+
+#define   rdiotgts_prm "..\..\nos_api\rdio_3.prm"
+#define   RDIOTGTS_PRM rdiotgts_prm
+#define   RDIO_3_PRM   rdiotgts_prm
+
+#define   comhndlr_prm "..\..\nos_api\comhnd_3.prm"
+#define   COMHNDLR_PRM comhndlr_prm
+#define   COMHND_3_PRM comhndlr_prm
+#define   comhndlr_h   "..\..\nos_api\comhndlr.h"
+#define   COMHNDLR_H   comhndlr_h
+#define   comhndlr_def "..\..\nos_api\comhndlr.def"
+#define   COMHNDLR_DEF comhndlr_def
+
+#define   display_h    "..\..\nos_api\display.h"
+#define   DISPLAY_H    display_h
+
+#define   eeprom_h    "..\..\nos_api\eeprom.h"
+#define   EEPROM_H    eeprom_h
+
+#define   printer_h    "..\..\nos_api\printer.h"
+#define   PRINTER_H    printer_h
+
+#define   rtc_h        "..\..\nos_api\rtc.h"
+#define   RTC_H        rtc_h
+
+#define   rtcutil_h    "..\..\nos_api\rtcutil.h"
+#define   RTCUTIL_H    rtcutil_h
+
+#define   cpuhw_h      "..\..\nos_api\cpuhw.h"
+#define   CPUHW_H      cpuhw_h
+
+#define   errlog_h     "..\..\nos_api\errlog.h"
+#define   ERRLOG_H     errlog_h
+
+#define   formater_h   "..\..\nos_api\formater.h"
+#define   FORMATER_H   formater_h
+
+#define   formater_def "..\..\nos_api\formater.def"
+#define   FORMATER_DEF   formater_def
+
+ #define   link_h      "..\..\nos_api\link.h"
+#define   LINK_H       link_h
+
+#define   util_h       "..\..\nos_api\util.h"
+#define   UTIL_H       util_h
+
+#define   sysutil_h    "..\..\nos_api\sysutil.h"
+#define   SYSUTIL_H    sysutil_h
+
+#define   prntutil_h   "..\..\nos_api\prntutil.h"
+#define   PRNTUTIL_H   prntutil_h
+
+#define   scanner_h    "..\..\nos_api\scanner.h"
+#define   SCANNER_H    scanner_h
+
+#define   kb_h         "..\..\nos_api\kb.h"
+#define   KB_H         kb_h
+
+#define   kbhw_h       "..\..\nos_api\kbhw.h"
+#define   KBHW_H       kbhw_h
+
+#define   cardrdr_h    "..\..\nos_api\cardrdr.h"
+#define   CARDRDR_H    cardrdr_h
+
+#define   mte_h        "..\..\nos_api\mte.h"
+#define   MTE_H        mte_h
+
+#define   applhead_def "..\..\nos_api\applhead.def"
+#define   APPLHEAD_DEF applhead_def
+
+#define   applmngr_h   "..\..\nos_api\applmngr.h"
+#define   APPLMNGR_H   applmngr_h
+
+#define   pronmngr_h   "..\..\nos_api\protmngr.h"
+#define   PROTMNGR_H   pronmngr_h
+
+#define   protmngr_def "..\..\nos_api\protmngr.def"
+#define   PROTMNGR_DEF   protmngr_def
+
+#define   barcode_h    "..\..\nos_api\barcode.h"
+#define   BARCODE_H    barcode_h
+
+#define   grphtext_h   "..\..\nos_api\grphtext.h"
+#define   GRPHTEXT_H   grphtext_h
+
+#define   grphtext_def "..\..\nos_api\grphtext.def"
+#define   GRPHTEXT_DEF   grphtext_def
+
+#define   grphdisp_h   "..\..\nos_api\grphdisp.h"
+#define   GRPHDISP_H   grphdisp_h
+
+#define   gsmradio_h   "..\..\nos_api\gsmradio.h"
+#define   GSMRADIO_H   gsmradio_h
+
+#define   gsmradio_prm "..\..\nos_api\gsmradio.prm"
+#define   GSMRADIO_PRM gsmradio_prm
+
+#define   gsm_msg_def  "..\..\nos_api\gsm_msg.def"
+#define   GSM_MSG_DEF  gsm_msg_def
+
+#define   params_h     "..\..\nos_api\params.h"
+#define   PARAMS_H     params_h
+
+#define   uart_h       "..\..\nos_api\uart.h"
+#define   UART_H       uart_h
+
+#define   ftp_h        "..\..\nos_api\ftp.h"
+#define   FTP_H        ftp_h
+
+#define   icctrans_h   "..\..\nos_api\icctrans.h"
+#define   ICCTRANS_H   icctrans_h
+
+#define   safe_h       "..\..\nos_api\safe.h"
+#define   SAFE_H       safe_h
+
+#define   touch_h       "..\..\nos_api\touch.h"
+#define   TOUCH_H       touch_h
+
+#define   stat_bar_h    "..\..\nos_api\stat_bar.h"
+#define   STAT_BAR_H    stat_bar_h
+
+#define   winform_h     "..\..\nos_api\winform.h"
+#define   WINFORM_H    winform_h
+
+#define   winform_def   "..\..\nos_api\winform.def"
+#define   WINFORM_DEF   winform_def
+
+#define   dlmlinkr_def  "..\..\nos_api\dlmlinkr.def"
+
+#define   dlb_type_def  "..\..\nos_api\dlb_type.def"
+#define   dlmhead_def   "..\..\nos_api\dlmhead.def"
+#define   evd_hd_def    "..\..\nos_api\evd_hd.def"
+#define   multiapp_def  "..\..\nos_api\multiapp.def"
+#define   encryptr_def  "..\..\nos_api\encryptr.def"
+#define   session_def   "..\..\nos_api\session.def"
+#define   gftp_def      "..\..\nos_api\gftp.def"
+#define   modem_prm     "..\..\nos_api\modem_3.prm"
+#define   modem_h       "..\..\nos_api\modem.h"
+#define   at_radio_prm  "..\..\nos_api\at_radio.prm"
+#define   appload_h     "..\..\nos_api\appload.h"
+#define   atmhw_h       "..\..\nos_api\atmhw.h"
+#define   atmmenu_h     "..\..\nos_api\atmmenu.h"
+#define   atmmenu_def   "..\..\nos_api\atmmenu.def"
+#define   caller_h      "..\..\nos_api\caller.h"
+#define   des_h         "..\..\nos_api\des.h"
+#define   dns_h         "..\..\nos_api\dns.h"
+#define   fismem_h      "..\..\nos_api\fismem.h"
+#define   fstp_h        "..\..\nos_api\fstp.h"
+#define   gftp_h        "..\..\nos_api\gftp.h"
+#define   iccsyn_h      "..\..\nos_api\iccsyn.h"
+#define   keysldr_h     "..\..\nos_api\keysldr.h"
+#define   multiapp_h    "..\..\nos_api\multiapp.h"
+#define   nbmp_h        "..\..\nos_api\nbmp.h"
+#define   protmngr_h    "..\..\nos_api\protmngr.h"
+#define   tcpapi_h      "..\..\nos_api\tcpapi.h"
+#define   phone_h       "..\..\nos_api\phone.h"
+#define   statist_h     "..\..\nos_api\statist.h"
+#define   dial_3_prm    "..\..\nos_api\dial_3.prm"
+#define   soft_kb_h     "..\..\nos_api\soft_kb.h"
+#define   sign_cap_h    "..\..\nos_api\sign_cap.h"
+#define   seckbmst_h    "..\..\nos_api\seckbmst.h"
+#define   setup_db_h    "..\..\nos_api\setup_db.h"
+#define   session_h     "..\..\nos_api\session.h"
+#define   test_h        "..\..\nos_api\test.h"
+#define   platform_def  "..\..\nos_api\platform.def"
+
+#define   protmngr_def  "..\..\nos_api\protmngr.def"
+#define   platform_def  "..\..\nos_api\platform.def"
+#define   rsa_def       "..\..\nos_api\rsa.def"
+#define   rsa_h         "..\..\nos_api\rsa.h"
+#define   sha1_h        "..\..\nos_api\sha1.h"
+#define   seckb_def     "..\..\nos_api\seckb.def"
+#define   strings_h     "..\..\nos_api\strings.h"
+#define   keysldr_def   "..\..\nos_api\keysldr.def"
+#define   touch_def     "..\..\nos_api\touch.def"
+#define   md5_h         "..\..\nos_api\md5.h"
+#define   wifi_prm      "..\..\nos_api\wifi.prm"
+#define   memcard_h     "..\..\nos_api\memcard.h"
+#define   fat_h         "..\..\nos_api\fat.h"
+#define   blockdsc_h    "..\..\nos_api\blockdsc.h"
+#define   fisflash_h    "..\..\nos_api\fisflash.h"
+#define   colors_def    "..\..\nos_api\colors.def"
+#define   grphtext_def    "..\..\nos_api\grphtext.def"
+#define   grphdisp_def    "..\..\nos_api\grphdisp.def"
+#define   bmp_def         "..\..\nos_api\bmp.def"
+
+/*#define   ping_h      "..\..\nos_api\ping.h"*/
+/*#define   PING_H      ping_h*/
+
+/*#define   ping_def    "..\..\nos_api\ping.def"*/
+/*#define   PING_DEF      ping_def*/
+
+/*----------------------------------------------------------*/
+/*                   PROJECT FILE                           */
+/*----------------------------------------------------------*/
+

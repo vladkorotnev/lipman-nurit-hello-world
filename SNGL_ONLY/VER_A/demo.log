@@ -1,0 +1,16 @@
+Warning ../src/demo.c 103: serbuf: Cast of type `byte[32]' to type `const char *'
+|    may violate an assumption made by the optimizer.
+|    To be safe, you should recompile your program at a lower
+|    optimization level; or else, turn off the BEHAVED toggle.
+Warning ../src/demo.c 103: serbuf: Cast of type `byte *' to type `const char *'
+|    may violate an assumption made by the optimizer.
+Warning ../src/demo.c 104: serbuf: Cast of type `byte[32]' to type `char *'
+|    may violate an assumption made by the optimizer.
+Warning ../src/demo.c 104: serbuf: Cast of type `byte *' to type `char *'
+|    may violate an assumption made by the optimizer.
+Warning ../src/demo.c 130: Cast of type `byte *' to type `char *'
+|    may violate an assumption made by the optimizer.
+Warning ../src/demo.c 183: Cast of type `byte *' to type `char *'
+|    may violate an assumption made by the optimizer.
+Warning ../src/demo.c 189: Cast of type `byte *' to type `char *'
+|    may violate an assumption made by the optimizer.

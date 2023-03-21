@@ -1,0 +1,52 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   PING.DEF                                                    *
+ *                                                                          *
+ * MODULE NAME: PING                                                        *
+ *                                                                          *
+ * PROGRAMMER:  Barak.                                                      *
+ *                                                                          *
+ * DESCRIPTION: Ping Utility.                                               *
+ *                                                                          *
+ *              Base on Track Ping Utility                                  *
+ *                                                                          *
+ * REVISION:    01.00 28/06/2004                                            *
+ *                                                                          *
+ ****************************************************************************/
+#ifndef __PING_DEF__
+  #define __PING_DEF__
+
+   /*=======================================*
+    *   I N T R O D U C T I O N             *
+    *=======================================*/
+
+/*
+ *
+ *  This file Contains the decleretion for the Ping interface 
+ *
+ */
+
+   /*=======================================*
+    *        D E F I N I T I O N S          *
+    *=======================================*/
+
+
+   /* ======================================*
+    *    T Y P E  D E C L A R A T I O N     *
+    * ======================================*/
+
+typedef struct
+{
+    ulint                  LastRtt;      /* Round trip time in milliseconds of the last PING request/reply. */
+    ulint                  MaxRtt;       /* Maximum round trip time in milliseconds of the PING request/reply packets. */
+    ulint                  MinRtt;       /* Minimum round trip time in milliseconds of the PING request/reply packets. */
+    ulint                  AvgRtt;       /* Average round trip time in milliseconds of the PING request/reply packets. */
+    ulint                  SumRtt;       /* Sum of all round trip times in milliseconds of the PING request/reply packets. */
+    ulint                  Transmitted;  /* Number of transmitted PING echo request packets so far */
+    ulint                  Received;     /* number of received echo replies packets (not including duplicated packets)*/
+    ulint                  Duplicated;   /* Number of duplicated ping echo replies packets */
+    lint                   SendErrorCode;/* Send Error code if any that occured */
+    lint                   RecvErrorCode;/* Recv CB Error code if any that occured */
+} PingInfo;
+
+#endif

@@ -1,0 +1,54 @@
+/****************************************************************************
+ * FILE NAME:   RSA.DEF
+ * MODULE NAME: RSA (Rivert-Shamir-Adleman  Algorithm)
+ * PROGRAMMER:  Fehmi Ozgun. (modifications)
+ *
+ * DESCRIPTION:
+ *
+ * REVISION:    01.00   17/10/2001 - Fehmi Ozgun
+ * REVISION:    01.01   10/08/2002 - Yshaiahu
+ * REVISION:    01.10   10/09/2002 - Yshaiahu
+ * REVISION:    01.11   30/09/2002 - Yshaiahu
+ * REVISION:    01.12   05/10/2002 - Yshaiahu
+ * REVISION:    01.13   26/11/2002 - Yshaiahu
+ * HISTORY:     Modified to get it an independent module
+ *     01.10    Company conventions for function prototypes have been applied.
+ *              function prototypes changed.
+ *     01.11    Function prototypes changed.
+ *     01.12    'bits' field in KEY's structures are renamed to KeyLengh
+ *     01.13    The definition of UnSign(...) function goes from rsa.def into
+ *              rsaprv.h 
+ *     01.14    Removed all the static variables
+ *              Removed all the references on standard linraries
+ *
+ ****************************************************************************/
+
+#ifndef __NOS_RSA_DEF
+#define __NOS_RSA_DEF
+
+    /*==========================================*
+	 *           D E F I N I T I O N S          *
+	 *==========================================*/
+
+/* RSA key lengths. */
+#define MIN_RSA_MODULUS_BITS    508
+#define MAX_RSA_MODULUS_BITS    2048 /* Change this value for max key size */
+#define MAX_RSA_MODULUS_LEN     ((MAX_RSA_MODULUS_BITS + 7) / 8)
+#define MAX_RSA_PRIME_BITS      ((MAX_RSA_MODULUS_BITS + 1) / 2)
+#define MAX_RSA_PRIME_LEN       ((MAX_RSA_PRIME_BITS   + 7) / 8)
+
+
+    /*==========================================*
+     *    T Y P E S   D E C L A R A T I O N     *
+     *==========================================*/
+
+/* RSA public key. */
+typedef packed struct 
+{
+  usint KeyLength;                         /* max modulus length in bits (== MAX_RSA_MODULUS_BITS) */
+  byte  Modulus [MAX_RSA_MODULUS_LEN];     /* modulus */
+  byte  Exponent[MAX_RSA_MODULUS_LEN];     /* public exponent */
+} RSA_PUBLIC_KEY;
+
+
+#endif

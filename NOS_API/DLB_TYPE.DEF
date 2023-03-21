@@ -1,0 +1,71 @@
+/****************************************************************************
+ * FILE NAME:   dlb_type.def                                                *
+ * MODULE NAME: DLB_TYPE                                                    *
+ * PROGRAMMER:  Barak Schiby                                                *
+ * DESCRIPTION: Blocks Type definetion.                                     *
+ * REVISION:    05/02/2003.                                                 *
+ ****************************************************************************/
+
+#ifndef __DLB_TYPE_DEF__
+#define __DLB_TYPE_DEF__
+
+       /*==========================================*
+        *         I N T R O D U C T I O N          *
+	    *==========================================*/
+
+/* This file contains block types.
+   The following types are also defined in general.def 
+                                                        */
+	   /*==========================================*
+	    *             I N C L U D E S              *
+	    *==========================================*/
+/* void */
+
+	   /*==========================================*
+	    *           D E F I N I T I O N S          *
+	    *==========================================*/
+
+/* Block types */
+#define PARAMS_PTYPE_APPL               0x08            /* Block type: Single Application */
+#define PARAMS_PTYPE_EVENT_APPL         0x09            /* Block type: Event Driven Application */
+#define PARAMS_PTYPE_DLM                0x0A            /* Block type: Dynamic link module */
+#define PARAMS_PTYPE_STRINGS            0x10            /* Block type: Strings */
+#define PARAMS_PTYPE_LANG               0x11            /* Block type: Langauge */
+#define PARAMS_PTYPE_FONT               0x12            /* Block type: Fonts */
+#define PARAMS_PTYPE_PRINTER_FONT       0x13            /* Block type: Printer fonts */
+#define PARAMS_PTYPE_APPL_CREATED	0x31            /* Block type: Block created by application */
+#define PARAMS_PTYPE_SIMPLE_PARAM       0x30            /* Block type: Simple parameters */
+#define PARAMS_PTYPE_SIMPLE_PROTOCOL    0x38            /* Block type: Simple protocol */
+#define PARAMS_PTYPE_SIMPLE_CONST       0x39            /* Block type: Simple const */
+#define PARAMS_PTYPE_SIMPLE_LOGO        0x3A            /* Block type: Simple logo */
+#define PARAMS_PTYPE_IMAGE_PNG          0x50            /* Block type: PNG image */
+#define PARAMS_PTYPE_LPB                0x51            /* Block type: LPB */
+
+/* Other definitions */
+#define BLOCK_NAME_SIZE          8
+#define BLOCK_OWNER_SIZE         8
+
+          /*=========================================*
+           *        P U B L I C     T Y P E S        *
+           *=========================================*/
+
+typedef packed struct
+{
+  byte  BlockName[ BLOCK_NAME_SIZE ];   /* Name identifier of the block */
+  byte  BlockOwner[ BLOCK_OWNER_SIZE ]; /* Owner appl. identifier of the block */
+				                        /* 0xFF in first byte in no owner */
+  byte  Type;                           /* Block type */
+}
+BlockIdent;
+
+typedef packed struct
+{
+   usint Year;        /*  0...65535 */
+   byte Month;        /*  1..12  */
+   byte DayOfMonth;   /*  1..31  */
+   byte Hours;        /*  0..23  */
+   byte Minutes;      /*  0..59  */
+}
+   DateStruct;            /* Total of 6 byte */
+
+#endif

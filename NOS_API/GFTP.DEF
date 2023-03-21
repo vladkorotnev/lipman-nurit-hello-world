@@ -1,0 +1,97 @@
+/****************************************************************************
+* FILE NAME:   gftp.def
+* MODULE NAME: gftp
+* PROGRAMMER:  Gilad Hirsch
+* DESCRIPTION: implement ftp application over tcp.
+*              Each function can be called independently there is no need to
+*              create a sequence of calls.
+*              for example: to upload a file you should call the following-
+*              GFTP_upload(...)
+*              this call will go through all the states untill the upload (the
+*              connection the login etc. ).
+****************************************************************************/
+
+
+#ifndef __GFTP_DEF
+#define __GFTP_DEF
+
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+
+
+#define GFTP_MAX_USERNAME_LEN       15
+#define GFTP_MAX_PASSWORD_LEN       15
+#define MAX_REC_BUFF                1500
+#define GFTP_PORT_NUM               21
+#define MAX_GFTP_HANDLES            1
+#define TLV_REC_SIZE                1024
+#define TLV_BASE_REC_SIZE           100
+#define UPLOAD_BUFF_SIZE            8192
+
+ /*   GFTP Error types.
+  *   Each Error from -1 to -9 is standing for the rule that was being performed
+  *   so the rules numbers and order is parallel to the errors order.
+  *   Also each error have a description string in GFTP_Err_Dbg() so this
+  *   GFTP_err_t and GFTP_Err_Dbg() need to keep the same order.
+  */
+typedef enum
+        {
+            GFTP_SUCCESS        =  0,
+            GFTP_CONNECT_ERR    = -1, /*cnct_rl*/
+            GFTP_USER_ERR       = -2, /*user_rl*/
+            GFTP_PASS_ERR       = -3, /*pass_rl*/
+            GFTP_ACCT_ERR       = -4, /*acct_rl*/
+            GFTP_CD_ERR         = -5, /*cd_rl  */
+            GFTP_DEL_ERR        = -6, /*del_rl */
+            GFTP_PASV_ERR       = -7, /*port_rl*/
+            GFTP_LIST_ERR       = -8, /*list_rl*/
+            GFTP_UPLOAD_ERR     = -9, /*stor_rl*/
+            GFTP_DOWNLOAD_ERR   = -10,/*retr_rl*/
+            GFTP_RESUME_ERR     = -11,/*rest_rl*/
+            GFTP_TYPE_ERR       = -12,/*type_rl*/
+            GFTP_LOGOFF_ERR     = -13,/*quit_rl*/
+            GFTP_GENERAL_ERR    = -14,
+            GFTP_OPEN_ERR       = -15,
+            GFTP_SEND_ERR       = -16,
+            GFTP_RECV_ERR       = -17,
+            GFTP_INVALID_PTR    = -18,
+            GFTP_FULL_HANDLES   = -19,
+            GFTP_ABORTED        = -20,
+            GFTP_Max_Errors     = -21
+        }GFTP_err_t;
+
+
+typedef enum
+    {
+      GFTP_PARAMS,
+      GFTP_RAM,
+      GFTP_RAMDISK,
+      GFTP_RAMDISKTLV
+    }GFTP_FileType_t;
+
+typedef enum
+    {
+      GFTP_APPEND        = 0x01,
+      GFTP_OVERWRITE     = 0x02,
+      GFTP_RESUME        = 0x04,
+      GFTP_ASCII         = 0x08,
+      GFTP_EBCDIC        = 0x10,
+      GFTP_IMAGE         = 0x20,
+    }GFTP_TransferType_t;
+
+typedef enum
+    {
+      GFTP_BLOCKING,
+      GFTP_NONBLOCKING
+    }GFTP_RunMode_t;
+
+
+
+typedef sint GFTP_User_Handle;
+
+/* void */
+
+
+#endif

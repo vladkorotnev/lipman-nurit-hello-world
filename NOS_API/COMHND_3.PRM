@@ -1,0 +1,76 @@
+/****************************************************************************
+ *                                                                          *
+ * FILE NAME:   ComHndlr.PRM                                                *
+ *                                                                          *
+ * MODULE NAME: ComHndler                                                   *
+ *                                                                          *
+ * PROGRAMMER:  Avishai                                                     *
+ *                                                                          *
+ * DESCRIPTION: Communication handler parameters                            *
+ *                                                                          *
+ * REVISION:    01.01 14/06/94                                              *
+ *                                                                          *
+ * HISTORY:     none                                                        *
+ *                                                                          *
+ ****************************************************************************/
+#ifdef _ARM
+  #pragma Align_members(2);
+#endif
+
+          /*=============================================================*
+           *               I N T R O D U C T I O N                       *
+           *=============================================================*/
+
+#ifndef liptypes_def
+  #define liptypes_def  "\subj\standard\types\liptypes.def"
+#endif
+#include liptypes_def
+
+#ifndef __COMHNDLR_PRM
+#define __COMHNDLR_PRM
+
+
+          /*=============================================================*
+           *                 D E F I N I T I O N S                       *
+           *=============================================================*/
+
+#define COMHNDLR "CMHNDL"   /* this is the block name */
+
+          /*=============================================================*
+           *       T Y P E  &  S T R U C T    D E C L A R A T I O N      *
+           *=============================================================*/
+#ifndef CENTER_MMI
+
+typedef  struct
+{
+   ulint   TxLineTimeout;      /* expert parameter */
+                               /* timeout for TxLine, in mSec. */
+                               /* DEFAULT: 2000 */
+   
+   ulint   TxRadioTimeout;      /* expert parameter */
+                                /* timeout for TxLine, in mSec. */
+                                /* default: 2000 */
+
+   usint    TimeBetweenTrials;  /* in seconds, normaly 0. */
+                                /* DEFAULT: 0 */
+
+
+   boolean  ExternalModem;      /* expert parameter   */
+                                /* TRUE  = external   */
+                                /* FALSE = internal   */
+                                /* DEFAULT: 0 (false) */
+
+   byte     NoLineRetrys;       /* expert parameter */
+                                /* number of retrys when no line or    */
+                                /* no dial tone. This number of tryals */
+                                /* is per (each) dial.                 */
+                                /* DEFAULT: 3 */
+} ComHndlrParamType;
+
+#endif
+
+
+#endif
+#ifdef _ARM
+  #pragma Align_members(4);
+#endif

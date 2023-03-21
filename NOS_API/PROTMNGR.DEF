@@ -1,0 +1,196 @@
+/****************************************************************************
+ * FILE NAME:   protmngr.def
+ * MODULE NAME: protmngr
+ * PROGRAMMER:  Barak
+ * DESCRIPTION: TCP/IP protocol manager (public types)
+ * REVISION:    01.00 01/06/03 15:52
+ ****************************************************************************/
+
+          /*==========================================*
+           *         I N T R O D U C T I O N          *
+           *==========================================*/
+#ifndef __protmngr_def
+  #define __protmngr_def
+
+          /*==========================================*
+           *         P A R A M E T E R S              *
+           *==========================================*/
+
+          /*==========================================*
+           *           D E F I N I T I O N S          *
+           *==========================================*/
+#define PROTMNGR_USERNAME_LEN       32
+#define PROTMNGR_PASSWORD_LEN       32
+#define PROTMNGR_IP_ADDRESS_STR_LEN 32
+#define PROTMNGR_MAC_ADDRESS_LEN    6
+#define LOGGING_MSG_LEN             17
+  typedef struct
+  {
+     char  Username[PROTMNGR_USERNAME_LEN+1];	/* User name for this ISP (default empty)*/
+     char  Password[PROTMNGR_PASSWORD_LEN+1];	/* password associated with the username (default empty)*/
+     usint LoginTimeout;        	        /* in seconds from 0 to 32767 (default 60) */
+     usint LoginType;                           /* Login type see (default PROTMNGR_LOGIN_EMPTY) */
+     usint PppType;                             /* Login type see (default PROTMNGR_PPP_STANDART)*/
+     usint ConnType;                            /* Login type see (no default)*/
+     char  LocalIp[PROTMNGR_IP_ADDRESS_STR_LEN];      /* default 000.000.000.000 (unused) */
+     char  NetMask[PROTMNGR_IP_ADDRESS_STR_LEN];      /* default 255.255.255.255	*/
+     char  PriDNSIpAddr[PROTMNGR_IP_ADDRESS_STR_LEN]; /* Primery DNS IP Address (default 000.000.000.000)*/
+     char  SecDNSIpAddr[PROTMNGR_IP_ADDRESS_STR_LEN]; /* Secondary DNS IP Address (default 000.000.000.000)*/
+     void  *Physical;                           /* Pointer to phyical layer can be one of the follwing
+                                                   DialTargetType ->  phone number, baudrate etc. defined in dial_3.prm
+                                                   Direct         -> port index and uart params: baudrate, numbits etc. defined here
+                                                   GSMTargetParamStruct -> Gsm / Gprs Connection defienetion defined in gsmradio.prm
+                                                   WiFiRadioParamStruct  - params for WiFi (see wifi.prm)
+                                                   (NO default parmeters)
+                                                 */
+     usint ValidFileds;                         /* BitMasc to determain the valid fileds see ... */
+     char GatewayIpAddr[PROTMNGR_IP_ADDRESS_STR_LEN];
+  }
+    ConnectParams;
+  /* Valid fileds */
+  #define PROTMNGR_USE_USERNAME 0x0001
+  #define PROTMNGR_USE_PASSWORD 0x0002
+  #define PROTMNGR_USE_LOGIN_TO 0x0004
+  #define PROTMNGR_USE_LOGIN    0x0008
+  #define PROTMNGR_USE_PPP      0x0010
+  #define PROTMNGR_USE_PHYSICAL 0x0020
+  #define PROTMNGR_USE_LOCALIP  0x0040
+  #define PROTMNGR_USE_NETMASK  0x0080
+  #define PROTMNGR_USE_PRIDNS   0x0100
+  #define PROTMNGR_USE_SECDNS   0x0200
+  #define PROTMNGR_USE_GATEWAY  0x0400
+  /* Login Types */
+  #define PROTMNGR_LOGIN_EMPTY            1
+  #define PROTMNGR_LOGIN_ISP_STANDART     2
+  #define PROTMNGR_LOGIN_UNIX             3
+  #define PROTMNGR_LOGIN_NO_WELCOME       4
+  /* Ppp Types */
+  #define PROTMNGR_PPP_STANDART           1
+  #define PROTMNGR_PPP_RAS                2
+  /* Connection Type */
+  #define PROTMNGR_ICT_PPP_DIRECT         1/* Direct PPP  */
+  #define PROTMNGR_ICT_PPP_DIALUP         2/* Dialup PPP  */
+  #define PROTMNGR_ICT_GPRS_RADIO         3/* Radio GPRS  */
+  #define PROTMNGR_ICT_GSM_RADIO          4/* Radio GSM   */
+  #define PROTMNGR_ICT_ETRNT_LINK         5/* Ethernet    */
+  #define PROTMNGR_ICT_WIFI_LINK          6/* WiFi    */
+
+
+/*Phisical connections bits for bit array
+ * set by ProtMngr_GetPhysicalConnection()*/
+#define  PROTMNGR_PPP_DIRECT_BIT    0x0001  /* Direct PPP  */
+#define  PROTMNGR_PPP_DIALUP_BIT    0x0002  /* Dialup PPP  */
+#define  PROTMNGR_FLINK_485_BIT     0x0004  /* RS485 Flink */
+#define  PROTMNGR_CDPD_RADIO_BIT    0x0008  /* Radio CDPD  */
+#define  PROTMNGR_GPRS_RADIO_BIT    0x0010  /* Radio GPRS  */
+#define  PROTMNGR_GSM_RADIO_BIT     0x0020 /* Radio GSM   */
+#define  PROTMNGR_MASC_RADIO_BIT    0x0040  /* Radio MASC  */
+#define  PROTMNGR_CDMA_RADIO_BIT    0x0080  /* Radio CDMA  */
+#define  PROTMNGR_ETRNT_LINK_BIT    0x0100  /* Ethernet    */
+#define  PROTMNGR_WIFI_LINK_BIT     0x0200  /* WiFi        */
+
+
+
+  typedef struct
+  {
+    usint     index;	/* UART index	*/
+    comm_param param;	/* UART parameters: baudrate, numbits, databits etc.*/
+  } Direct;
+
+ typedef packed struct
+ {
+   char  GatewayIpAddr[PROTMNGR_IP_ADDRESS_STR_LEN];
+   byte  Spare[50];
+ }Ethernet;
+
+
+          /*==========================================*
+           *      T Y P E   D E C L A R A T I O N     *
+           *==========================================*/
+
+typedef enum           /**ProtMngr_xxx(...) return codes:                 */
+{
+ ISP_OK,                /*action performed without error                  */
+ ISP_NOT_FOUND,         /*ISP or Destination not found in database        */
+ ISP_NOT_CONNECTED,     /*ISP not connected, when trying to disconnect it */
+ ISP_ALREADY_CONNECTED, /*already connected to this or another ISP        */
+ ISP_LOGIN_SCRIPT_ERR,  /*syntax error in the login script                */
+ ISP_LOGIN_TIMEOUT,     /*timeout waiting for a string when logging in    */
+ ISP_NO_LINK,           /*the specified link protocol cannot be negotiated*/
+ ISP_NO_ROUTE,          /*cannot find a route to specified IP address     */
+ ISP_USER_BREAK,        /*user pressed ESC when waiting for logging in    */
+ ISP_LINE_CONNECTED,    /*Line is connected */
+ ISP_PPP_OPTIONS_ERR,   /* Ppp_SetOptions function failed to set options*/
+ ISP_LOGIN_ERR,         /*incorrect username and/or password              */
+ ISP_INPROGRESS,
+ ISP_INVALID_PARAMS     /* Parameters are invalid */
+} ISP_return_codes;
+
+typedef enum
+{
+    PROTMNGR_OK,
+    PROTMNGR_FAIL,
+    PROTMNGR_INPROGRESS
+
+}ProtMngrStatus;
+
+typedef enum
+{
+    PROTMNGR_USER_ABORT       = 1,    /*Turn ON/OFF user abort.  Default: ON (abort enable)*/
+    PROTMNGR_USE_LINE_ONLY    = 2,   /*use line only flag set by comhndlr. Default: OFF (ignore line only flag)*/
+    PROTMNGR_MAX_OPTIONS
+}
+ ProtMngr_Option_t;
+
+
+
+
+
+
+
+#define TCPIP_SAFE_VER   0
+#define TCPIP_SAFE_VER_1 1
+#define TCPIP_SAFE_VER_2 2
+#define TCPIP_SAFE_VER_3 3
+
+#define TCPIP_SAFE_VER_SIZE      2+2+2+33+33+33
+#define TCPIP_SAFE_VER_1_SIZE    TCPIP_SAFE_VER_SIZE + sizeof(TcpIpDownload.SelfIp)+         \
+                                 sizeof(TcpIpDownload.MaskIp)+sizeof(TcpIpDownload.GatewayIp)
+#define TCPIP_SAFE_VER_2_SIZE    TCPIP_SAFE_VER_1_SIZE + sizeof(TcpIpDownload.HostName)
+#define TCPIP_SAFE_VER_3_SIZE    TCPIP_SAFE_VER_2_SIZE+sizeof(TcpIpDownload.Padding)+sizeof(TcpIpDownload.PortId)
+
+typedef struct
+{
+   usint StructVer;
+   usint PppType,LoginType;
+   char  Username[PROTMNGR_USERNAME_LEN+1];	    /* User name                             */
+   char  Password[PROTMNGR_PASSWORD_LEN+1];	    /* password associated with the username */
+   char  IpAddr[PROTMNGR_IP_ADDRESS_STR_LEN+1]; /* Host IP address                       */
+   char  SelfIp[PROTMNGR_IP_ADDRESS_STR_LEN+1];
+   char  MaskIp[PROTMNGR_IP_ADDRESS_STR_LEN+1];
+   char  GatewayIp[PROTMNGR_IP_ADDRESS_STR_LEN+1];
+   char  HostName[PROTMNGR_IP_ADDRESS_STR_LEN+1];
+   char  Padding[1];
+   usint PortId;
+}
+  TcpIpDownloadSafe;
+
+
+#define TCPIP_INTERFACE_VER   1
+typedef struct
+{
+   usint StructVer; /* Must set to TCPIP_INTERFACE_VER */
+   char SelfIpAddr  [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* Self IP as received from ISP             */
+   char DnsPrimIp   [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* primary DNS IP as defined in NCC block   */
+   char DnsSecIp    [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* secondery DNS IP as defined in NCC block */
+   char IspDnsPrimIp[PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* primary DNS IP as received from ISP      */
+   char IspDnsSecIp [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* secondery DNS IP as received from ISP    */
+   char GatewayIp   [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* gateway IP                               */
+   char NetMask     [PROTMNGR_IP_ADDRESS_STR_LEN+1];   /* netmsak                                  */
+   char PhysicalAddress[PROTMNGR_MAC_ADDRESS_LEN];    /* 6 bytes mac address */
+}
+ InterfaceIPAdr;
+
+
+#endif
+

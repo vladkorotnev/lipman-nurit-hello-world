@@ -1,0 +1,1254 @@
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 1
+Fri Dec 31 16:08:11 1999
+
+
+
+Command line: D:\HCARM\BIN\ldarm.exe release\obj\applhead.o\
+		 release\obj\demo.o linker.cmd -z dup -zpurgetext\
+		 -Xnocompress -Bpictable -Bcopydata -Csymbols -Cglobals\
+		 -o release\demo.elf -m
+
+Arguments after expansion:
+	 release\obj\applhead.o release\obj\demo.o \
+	..\..\nos_api\lip_crt.o(lip_crt.o) \
+	..\..\nos_api\lip_crt.o(pictable.o) \
+	..\..\nos_api\libnos.a(libnos.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o) \
+	D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o) -z dup \
+	-zpurgetext -Xnocompress -Bpictable -Bcopydata -Csymbols \
+	-Cglobals -o release\demo.elf -m 
+
+Command file "linker.cmd":
+    #
+    # Metaware linker commnad file
+    #
+    
+    LOAD ..\..\nos_api\lip_crt.o
+    LOAD ..\..\nos_api\libnos.a
+    
+    # DLMs
+    
+    
+    # Standard library
+    
+    LOAD D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A
+    LOAD D:\HCARM\LIB\BE\THUMB\PIC\LIBHL.A
+    LOAD D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A
+    
+    # Memory map
+    
+    SECTIONS {
+    
+            GROUP ADDRESS 0x50040 : {
+                  .rodata1 : {applhead.o}
+                  .text?: {lip_crt.o}
+                  
+                  * (TEXT): {}
+                  * (LIT): {}
+                  }
+    
+            GROUP: {
+                  RW_data_Base=.;
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 2
+Fri Dec 31 16:08:11 1999
+
+                  .sdatai?: {}
+                  .sdata?: {}
+                   sb$$adcons?: {} 
+                  .sbss?: { * {.sbss} }
+                  *(DATA): {}
+                  C$$zidata? : { * { TYPE bss } }
+                  static_data_size = .-RW_data_Base;
+                  }
+    
+    }
+
+OUTPUT MODULE NAME:	release\demo.elf
+OUTPUT MODULE FORMAT:	Absolute Executable
+_____________________________
+
+
+SECTION SUMMARY
+_______________
+
+OUTPUT/  TYPE   START     END
+ INPUT SECTION  ADDRESS   ADDRESS   LENGTH
+
+.rodata1 lit    00050040  0005007f  00000040
+.text    text   00050080  00050127  000000a8
+.CardRdr_Disable
+         text   00050128  0005012b  00000004
+.CardRdr_Enable
+         text   0005012c  0005012f  00000004
+.CardRdr_GetTrack1
+         text   00050130  00050133  00000004
+.CardRdr_GetTrack2
+         text   00050134  00050137  00000004
+.CardRdr_IsAnyTrackCompleted
+         text   00050138  0005013b  00000004
+.CardRdr_SetBeepTime
+         text   0005013c  0005013f  00000004
+.Display_Cls
+         text   00050140  00050143  00000004
+.Display_OnOff
+         text   00050144  00050147  00000004
+.Display_PopDown
+         text   00050148  0005014b  00000004
+.Display_PopUp
+         text   0005014c  0005014f  00000004
+.Display_SetFont
+         text   00050150  00050153  00000004
+.Display_UpDisplay
+         text   00050154  00050157  00000004
+.Display_Write
+         text   00050158  0005015b  00000004
+.Display_WriteStr
+         text   0005015c  0005015f  00000004
+.Formater_GoMenu
+         text   00050160  00050163  00000004
+.Kb_Read text   00050164  00050167  00000004
+.Mte_Wait
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 3
+Fri Dec 31 16:08:11 1999
+
+         text   00050168  0005016b  00000004
+.Printer_AdjustPaper
+         text   0005016c  0005016f  00000004
+.Printer_GetStatus
+         text   00050170  00050173  00000004
+.Printer_Write
+         text   00050174  00050177  00000004
+.Printer_WriteStr
+         text   00050178  0005017b  00000004
+.Uart_CheckBuf
+         text   0005017c  0005017f  00000004
+.Uart_Flush
+         text   00050180  00050183  00000004
+.Uart_GetBuf
+         text   00050184  00050187  00000004
+.Uart_Init
+         text   00050188  0005018b  00000004
+.init    text   0005018c  0005019f  00000014
+.memset  text   000501a0  000501a3  00000004
+.text    text   000501a4  00050c5b  00000ab8
+.thunks  text   00050c5c  00050c9b  00000040
+.base_entry
+         lit    00050c9c  00050caf  00000014
+.base_index
+         lit    00050cb0  00050cd3  00000024
+.initdat lit    00050cd4  00050de3  00000110
+.pictable
+         lit    00050de4  00050ee7  00000104
+.rodata1 lit    00050ee8  00050f1d  00000036
+.sdatai  bss    00050f20  00050f8f  00000070
+.sdata   bss    00050f90  00050fb3  00000024
+.sbss    bss    00050fb4  00050fb7  00000004
+.data    bss    00050fb8  0005100f  00000058
+C$$zidata
+         bss    00051010  0005109f  00000090
+
+
+SECTION DETAILS
+_______________
+
+OUTPUT/  TYPE   START     END
+ INPUT SECTION  ADDRESS   ADDRESS   LENGTH   MODULE NAME
+
+.rodata1 lit    00050040  0005007f  00000040
+
+    .rodata1    00050040  0005007f  00000040  release\obj\applhead.o
+
+.text    text   00050080  00050127  000000a8
+
+    .text       00050080  00050127  000000a8  ..\..\nos_api\lip_crt.o(lip_crt.o)
+                00050080   _start
+                0005009c   _stkinit
+                0005009e   _init_pic
+
+.CardRdr_Disable
+         text   00050128  0005012b  00000004
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 4
+Fri Dec 31 16:08:11 1999
+
+
+    .CardRdr_Disable
+                00050128  0005012b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050128   CardRdr_Disable
+
+.CardRdr_Enable
+         text   0005012c  0005012f  00000004
+
+    .CardRdr_Enable
+                0005012c  0005012f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005012c   CardRdr_Enable
+
+.CardRdr_GetTrack1
+         text   00050130  00050133  00000004
+
+    .CardRdr_GetTrack1
+                00050130  00050133  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050130   CardRdr_GetTrack1
+
+.CardRdr_GetTrack2
+         text   00050134  00050137  00000004
+
+    .CardRdr_GetTrack2
+                00050134  00050137  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050134   CardRdr_GetTrack2
+
+.CardRdr_IsAnyTrackCompleted
+         text   00050138  0005013b  00000004
+
+    .CardRdr_IsAnyTrackCompleted
+                00050138  0005013b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050138   CardRdr_IsAnyTrackCompleted
+
+.CardRdr_SetBeepTime
+         text   0005013c  0005013f  00000004
+
+    .CardRdr_SetBeepTime
+                0005013c  0005013f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005013c   CardRdr_SetBeepTime
+
+.Display_Cls
+         text   00050140  00050143  00000004
+
+    .Display_Cls
+                00050140  00050143  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050140   Display_Cls
+
+.Display_OnOff
+         text   00050144  00050147  00000004
+
+    .Display_OnOff
+                00050144  00050147  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050144   Display_OnOff
+
+.Display_PopDown
+         text   00050148  0005014b  00000004
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 5
+Fri Dec 31 16:08:11 1999
+
+
+    .Display_PopDown
+                00050148  0005014b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050148   Display_PopDown
+
+.Display_PopUp
+         text   0005014c  0005014f  00000004
+
+    .Display_PopUp
+                0005014c  0005014f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005014c   Display_PopUp
+
+.Display_SetFont
+         text   00050150  00050153  00000004
+
+    .Display_SetFont
+                00050150  00050153  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050150   Display_SetFont
+
+.Display_UpDisplay
+         text   00050154  00050157  00000004
+
+    .Display_UpDisplay
+                00050154  00050157  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050154   Display_UpDisplay
+
+.Display_Write
+         text   00050158  0005015b  00000004
+
+    .Display_Write
+                00050158  0005015b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050158   Display_Write
+
+.Display_WriteStr
+         text   0005015c  0005015f  00000004
+
+    .Display_WriteStr
+                0005015c  0005015f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005015c   Display_WriteStr
+
+.Formater_GoMenu
+         text   00050160  00050163  00000004
+
+    .Formater_GoMenu
+                00050160  00050163  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050160   Formater_GoMenu
+
+.Kb_Read text   00050164  00050167  00000004
+
+    .Kb_Read    00050164  00050167  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050164   Kb_Read
+
+.Mte_Wait
+         text   00050168  0005016b  00000004
+
+    .Mte_Wait   00050168  0005016b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 6
+Fri Dec 31 16:08:11 1999
+
+                00050168   Mte_Wait
+
+.Printer_AdjustPaper
+         text   0005016c  0005016f  00000004
+
+    .Printer_AdjustPaper
+                0005016c  0005016f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005016c   Printer_AdjustPaper
+
+.Printer_GetStatus
+         text   00050170  00050173  00000004
+
+    .Printer_GetStatus
+                00050170  00050173  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050170   Printer_GetStatus
+
+.Printer_Write
+         text   00050174  00050177  00000004
+
+    .Printer_Write
+                00050174  00050177  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050174   Printer_Write
+
+.Printer_WriteStr
+         text   00050178  0005017b  00000004
+
+    .Printer_WriteStr
+                00050178  0005017b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050178   Printer_WriteStr
+
+.Uart_CheckBuf
+         text   0005017c  0005017f  00000004
+
+    .Uart_CheckBuf
+                0005017c  0005017f  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                0005017c   Uart_CheckBuf
+
+.Uart_Flush
+         text   00050180  00050183  00000004
+
+    .Uart_Flush 00050180  00050183  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050180   Uart_Flush
+
+.Uart_GetBuf
+         text   00050184  00050187  00000004
+
+    .Uart_GetBuf
+                00050184  00050187  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050184   Uart_GetBuf
+
+.Uart_Init
+         text   00050188  0005018b  00000004
+
+    .Uart_Init  00050188  0005018b  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                00050188   Uart_Init
+
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 7
+Fri Dec 31 16:08:11 1999
+
+.init    text   0005018c  0005019f  00000014
+
+    .init       0005018c  0005019f  00000014  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+
+.memset  text   000501a0  000501a3  00000004
+
+    .memset     000501a0  000501a3  00000004  ..\..\nos_api\libnos.a(libnos.o)
+                000501a0   memset
+
+.text    text   000501a4  00050c5b  00000ab8
+
+    .text       000501a4  00050657  000004b4  release\obj\demo.o
+                000501a4   genjitsu_print
+                00050354   card_reader
+                00050544   calculator
+                00050554   raw_reader
+                000505f8   main
+    .text       00050658  000506c7  00000070  ..\..\nos_api\lip_crt.o(pictable.o)
+                00050658   __relocate_from_pictable
+    .text       000506c8  00050743  0000007c  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+                000506c8   memcpy
+    .text       00050744  00050773  00000030  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+                00050744   _zerobss
+    .text       00050774  000507d3  00000060  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+                00050774   __cpp_initialize
+                0005079c   __cpp_init
+                0005079c   _mw_initialize
+    .text       000507d4  0005093f  0000016c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+                00050824   __mw_register_ctor
+                0005085a   __mw_register_dtor
+                00050890   __mw_run_tls_ctor
+                000508b2   __mw_run_tls_dtor
+                000508d4   __mw_cpp_init
+                0005090c   __mw_cpp_exit
+    .text       00050940  000509fb  000000bc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+                00050940   atexit
+    .text       000509fc  00050bdb  000001e0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+                000509fc   _initdatCopy
+                00050a1a   _initcopy_pic
+                00050b04   _initcopy
+                00050bd2   _initcopy_exit
+    .text       00050bdc  00050bef  00000014  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+                00050bdc   __call_via_r0
+                00050bde   __call_via_r1
+                00050be0   __call_via_r2
+                00050be2   __call_via_r3
+                00050be4   __call_via_r4
+                00050be6   __call_via_r5
+                00050be8   __call_via_r6
+                00050bea   __call_via_r7
+                00050bec   __call_via_ip
+    .text       00050bf0  00050bf7  00000008  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+                00050bf0   _mwmutex_create
+                00050bf2   _mwmutex_delete
+                00050bf4   _mwmutex_lock
+                00050bf6   _mwmutex_unlock
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 8
+Fri Dec 31 16:08:11 1999
+
+    .text       00050bf8  00050c5b  00000064  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+                00050bf8   __cleanup
+                00050c28   _cexit
+                00050c58   _c_exit
+
+.thunks  text   00050c5c  00050c9b  00000040
+
+    .thunks     00050c5c  00050c9b  00000040  <Linker Defined>
+
+.base_entry
+         lit    00050c9c  00050caf  00000014
+
+    .base_entry 00050c9c  00050caf  00000014  ..\..\nos_api\lip_crt.o(lip_crt.o)
+                00050c9c   BaseDlmEntry
+
+.base_index
+         lit    00050cb0  00050cd3  00000024
+
+    .base_index 00050cb0  00050cd3  00000024  ..\..\nos_api\lip_crt.o(lip_crt.o)
+                00050cb0   BaseDlmIndex
+                00050cb4   DlmUserID
+
+.initdat lit    00050cd4  00050de3  00000110
+
+    .initdat    00050cd4  00050de3  00000110  <Linker Defined>
+                00050cd4   _initdat
+
+.pictable
+         lit    00050de4  00050ee7  00000104
+
+    .pictable   00050de4  00050ee7  00000104  <Linker Defined>
+                00050de4   __PICTABLE__
+
+.rodata1 lit    00050ee8  00050f1d  00000036
+
+    .rodata1    00050ee8  00050f1d  00000036  release\obj\demo.o
+
+.sdatai  bss    00050f20  00050f8f  00000070
+
+    .sdatai     00050f20  00050f8f  00000070  <Linker Defined>
+
+.sdata   bss    00050f90  00050fb3  00000024
+
+    .sdata      00050f90  00050fa7  00000018  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+    .sdata      00050fa8  00050fab  00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+    .sdata      00050fac  00050faf  00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+                00050fac   _exitv
+    .sdata      00050fb0  00050fb3  00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o)
+                00050fb0   _fclose_exit_p
+
+.sbss    bss    00050fb4  00050fb7  00000004
+
+    .sbss       00050fb4  00050fb7  00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+
+.data    bss    00050fb8  0005100f  00000058
+
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 9
+Fri Dec 31 16:08:11 1999
+
+    .data       00050fb8  00050ffd  00000046  release\obj\demo.o
+    .data       00051000  00051003  00000004  ..\..\nos_api\lip_crt.o(lip_crt.o)
+    .data       00051004  0005100f  0000000c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+
+C$$zidata
+         bss    00051010  0005109f  00000090
+
+    .bss        00051010  0005109f  00000090  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+
+.comment info   00000000  00000549  0000054a
+
+    .comment    00000000  0000001f  00000020  <Linker Defined>
+    .comment    00000020  0000007d  0000005e  release\obj\applhead.o
+    .comment    0000007e  000000ee  00000071  release\obj\demo.o
+    .comment    000000ef  0000015f  00000071  ..\..\nos_api\lip_crt.o(pictable.o)
+    .comment    00000160  000001b0  00000051  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+    .comment    000001b1  00000201  00000051  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+    .comment    00000202  00000252  00000051  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+    .comment    00000253  000002c3  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+    .comment    000002c4  00000334  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+    .comment    00000335  000003a5  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+    .comment    000003a6  000003f6  00000051  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+    .comment    000003f7  00000467  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+    .comment    00000468  000004d8  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+    .comment    000004d9  00000549  00000071  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o)
+
+.debug_frame
+         info   00000000  000007a7  000007a8
+
+    .debug_frame
+                00000000  00000107  00000108  release\obj\demo.o
+    .debug_frame
+                00000108  0000015b  00000054  ..\..\nos_api\lip_crt.o(lip_crt.o)
+    .debug_frame
+                0000015c  000001bf  00000064  ..\..\nos_api\lip_crt.o(pictable.o)
+    .debug_frame
+                000001c0  00000213  00000054  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+    .debug_frame
+                00000214  00000257  00000044  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+    .debug_frame
+                00000258  000002d7  00000080  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+    .debug_frame
+                000002d8  00000457  00000180  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+    .debug_frame
+                00000458  00000547  000000f0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+    .debug_frame
+                00000548  0000064f  00000108  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+    .debug_frame
+                00000650  00000693  00000044  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+    .debug_frame
+                00000694  00000713  00000080  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+    .debug_frame
+                00000714  000007a7  00000094  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+
+.strtab  info   00000000  00000966  00000967
+
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 10
+Fri Dec 31 16:08:11 1999
+
+    .strtab     00000000  00000966  00000967  release\demo.elf
+
+.symtab  info   00000000  00001c6f  00001c70
+
+    .symtab     00000000  00001c6f  00001c70  release\demo.elf
+
+.shstrtab
+         info   00000000  0000023f  00000240
+
+    .shstrtab   00000000  0000023f  00000240  release\demo.elf
+
+SYMBOL SUMMARY
+_______________
+
+SYMBOL         BINDING SECTION   VALUE     MODULE
+
+.text          local   .text      00050080  release\demo.elf
+.CardRdr_Disable
+               local   .CardRdr   00050128  release\demo.elf
+.CardRdr_Enable
+               local   .CardRdr   0005012c  release\demo.elf
+.CardRdr_GetTrack1
+               local   .CardRdr   00050130  release\demo.elf
+.CardRdr_GetTrack2
+               local   .CardRdr   00050134  release\demo.elf
+.CardRdr_IsAnyTrackCompleted
+               local   .CardRdr   00050138  release\demo.elf
+.CardRdr_SetBeepTime
+               local   .CardRdr   0005013c  release\demo.elf
+.Display_Cls   local   .Display   00050140  release\demo.elf
+.Display_OnOff local   .Display   00050144  release\demo.elf
+.Display_PopDown
+               local   .Display   00050148  release\demo.elf
+.Display_PopUp local   .Display   0005014c  release\demo.elf
+.Display_SetFont
+               local   .Display   00050150  release\demo.elf
+.Display_UpDisplay
+               local   .Display   00050154  release\demo.elf
+.Display_Write local   .Display   00050158  release\demo.elf
+.Display_WriteStr
+               local   .Display   0005015c  release\demo.elf
+.Formater_GoMenu
+               local   .Formate   00050160  release\demo.elf
+.Kb_Read       local   .Kb_Read   00050164  release\demo.elf
+.Mte_Wait      local   .Mte_Wai   00050168  release\demo.elf
+.Printer_AdjustPaper
+               local   .Printer   0005016c  release\demo.elf
+.Printer_GetStatus
+               local   .Printer   00050170  release\demo.elf
+.Printer_Write local   .Printer   00050174  release\demo.elf
+.Printer_WriteStr
+               local   .Printer   00050178  release\demo.elf
+.Uart_CheckBuf local   .Uart_Ch   0005017c  release\demo.elf
+.Uart_Flush    local   .Uart_Fl   00050180  release\demo.elf
+.Uart_GetBuf   local   .Uart_Ge   00050184  release\demo.elf
+.Uart_Init     local   .Uart_In   00050188  release\demo.elf
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 11
+Fri Dec 31 16:08:11 1999
+
+.init          local   .init      0005018c  release\demo.elf
+.memset        local   .memset    000501a0  release\demo.elf
+.text          local   .text      000501a4  release\demo.elf
+.thunks        local   .thunks    00050c5c  release\demo.elf
+.rodata1       local   .rodata1   00050040  release\demo.elf
+.base_entry    local   .base_en   00050c9c  release\demo.elf
+.base_index    local   .base_in   00050cb0  release\demo.elf
+.initdat       local   .initdat   00050cd4  release\demo.elf
+.pictable      local   .pictabl   00050de4  release\demo.elf
+.rodata1       local   .rodata1   00050ee8  release\demo.elf
+.sdatai        local   .sdatai    00050f20  release\demo.elf
+.sdata         local   .sdata     00050f90  release\demo.elf
+.data          local   .data      00050fb8  release\demo.elf
+.sbss          local   .sbss      00050fb4  release\demo.elf
+C$$zidata      local   C$$zidat   00051010  release\demo.elf
+../src/applhead.c
+               local   (ABSOLUTE) 00000000  release\obj\applhead.o
+id             local   .rodata1   00050040  release\obj\applhead.o
+../src/demo.c  local   (ABSOLUTE) 00000000  release\obj\demo.o
+menu_entries   local   .data      00050fb8  release\obj\demo.o
+function_menu  local   .data      00050fe8  release\obj\demo.o
+CommSetting    local   .data      00050ff8  release\obj\demo.o
+$t             local   .text      000501a4  release\obj\demo.o
+$b             local   .text      000501aa  release\obj\demo.o
+$b             local   .text      000501b0  release\obj\demo.o
+$b             local   .text      000501b6  release\obj\demo.o
+$b             local   .text      000501bc  release\obj\demo.o
+$b             local   .text      000501c4  release\obj\demo.o
+$b             local   .text      000501cc  release\obj\demo.o
+$b             local   .text      000501d6  release\obj\demo.o
+$b             local   .text      000501e4  release\obj\demo.o
+$b             local   .text      000501ee  release\obj\demo.o
+$b             local   .text      00050220  release\obj\demo.o
+$b             local   .text      00050226  release\obj\demo.o
+$b             local   .text      0005022a  release\obj\demo.o
+$b             local   .text      00050236  release\obj\demo.o
+$b             local   .text      0005023c  release\obj\demo.o
+$b             local   .text      00050242  release\obj\demo.o
+$b             local   .text      0005024a  release\obj\demo.o
+$b             local   .text      00050250  release\obj\demo.o
+$b             local   .text      00050254  release\obj\demo.o
+$b             local   .text      0005025e  release\obj\demo.o
+$b             local   .text      00050266  release\obj\demo.o
+$b             local   .text      0005027a  release\obj\demo.o
+$b             local   .text      00050288  release\obj\demo.o
+$b             local   .text      00050296  release\obj\demo.o
+$b             local   .text      0005029c  release\obj\demo.o
+$b             local   .text      000502a4  release\obj\demo.o
+$b             local   .text      000502a8  release\obj\demo.o
+$b             local   .text      000502b2  release\obj\demo.o
+$b             local   .text      000502b6  release\obj\demo.o
+$b             local   .text      000502c2  release\obj\demo.o
+$b             local   .text      000502ca  release\obj\demo.o
+$b             local   .text      000502d6  release\obj\demo.o
+$b             local   .text      000502e4  release\obj\demo.o
+$b             local   .text      000502ea  release\obj\demo.o
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 12
+Fri Dec 31 16:08:11 1999
+
+$b             local   .text      000502ee  release\obj\demo.o
+$b             local   .text      000502fe  release\obj\demo.o
+$b             local   .text      0005030a  release\obj\demo.o
+$b             local   .text      00050314  release\obj\demo.o
+$b             local   .text      00050318  release\obj\demo.o
+$b             local   .text      00050320  release\obj\demo.o
+$b             local   .text      00050334  release\obj\demo.o
+$b             local   .text      00050340  release\obj\demo.o
+$b             local   .text      00050346  release\obj\demo.o
+$b             local   .text      0005035a  release\obj\demo.o
+$b             local   .text      00050360  release\obj\demo.o
+$b             local   .text      00050366  release\obj\demo.o
+$b             local   .text      0005036e  release\obj\demo.o
+$b             local   .text      00050374  release\obj\demo.o
+$b             local   .text      0005037c  release\obj\demo.o
+$b             local   .text      00050380  release\obj\demo.o
+$b             local   .text      00050384  release\obj\demo.o
+$b             local   .text      0005038c  release\obj\demo.o
+$b             local   .text      000503a0  release\obj\demo.o
+$b             local   .text      000503be  release\obj\demo.o
+$b             local   .text      000503ca  release\obj\demo.o
+$b             local   .text      000503d0  release\obj\demo.o
+$b             local   .text      000503d8  release\obj\demo.o
+$b             local   .text      000503e0  release\obj\demo.o
+$b             local   .text      000503ec  release\obj\demo.o
+$b             local   .text      000503f2  release\obj\demo.o
+$b             local   .text      000503fa  release\obj\demo.o
+$b             local   .text      00050400  release\obj\demo.o
+$b             local   .text      0005040e  release\obj\demo.o
+$b             local   .text      00050414  release\obj\demo.o
+$d             local   .text      0005041e  release\obj\demo.o
+$t             local   .text      0005052c  release\obj\demo.o
+$b             local   .text      0005052c  release\obj\demo.o
+$b             local   .text      00050532  release\obj\demo.o
+$b             local   .text      00050538  release\obj\demo.o
+$b             local   .text      0005053e  release\obj\demo.o
+$b             local   .text      00050546  release\obj\demo.o
+$b             local   .text      00050558  release\obj\demo.o
+$b             local   .text      0005055e  release\obj\demo.o
+$b             local   .text      00050564  release\obj\demo.o
+$b             local   .text      0005056c  release\obj\demo.o
+$b             local   .text      00050572  release\obj\demo.o
+$b             local   .text      0005057a  release\obj\demo.o
+$b             local   .text      0005057e  release\obj\demo.o
+$b             local   .text      00050582  release\obj\demo.o
+$b             local   .text      0005058a  release\obj\demo.o
+$b             local   .text      0005059c  release\obj\demo.o
+$b             local   .text      000505b4  release\obj\demo.o
+$b             local   .text      000505bc  release\obj\demo.o
+$b             local   .text      000505c4  release\obj\demo.o
+$b             local   .text      000505cc  release\obj\demo.o
+$b             local   .text      000505d0  release\obj\demo.o
+$b             local   .text      000505d8  release\obj\demo.o
+$b             local   .text      000505e0  release\obj\demo.o
+$b             local   .text      000505e6  release\obj\demo.o
+$b             local   .text      000505ec  release\obj\demo.o
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 13
+Fri Dec 31 16:08:11 1999
+
+$b             local   .text      000505f2  release\obj\demo.o
+$b             local   .text      00050602  release\obj\demo.o
+$b             local   .text      0005060a  release\obj\demo.o
+$b             local   .text      00050612  release\obj\demo.o
+$b             local   .text      00050618  release\obj\demo.o
+$b             local   .text      0005061e  release\obj\demo.o
+$d             local   .text      0005062e  release\obj\demo.o
+..\SUBJ\ARM_SYS\LIP_CRT\lip_crt.s
+               local   (ABSOLUTE) 00000000  ..\..\nos_api\lip_crt.o(lip_crt.o)
+no_pic         local   .text      00050092  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_mylr          local   .data      00051000  ..\..\nos_api\lip_crt.o(lip_crt.o)
+code_reference_point
+               local   .text      000500a2  ..\..\nos_api\lip_crt.o(lip_crt.o)
+no_copy        local   .text      000500dc  ..\..\nos_api\lip_crt.o(lip_crt.o)
+get_gd_table   local   .text      000500d4  ..\..\nos_api\lip_crt.o(lip_crt.o)
+do_return      local   .text      00050100  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$t             local   .text      00050080  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      0005008a  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      0005008e  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      00050094  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$d             local   .text      000500c4  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$t             local   .text      000500d4  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      000500d8  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      000500f2  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$b             local   .text      000500fc  ..\..\nos_api\lip_crt.o(lip_crt.o)
+$d             local   .text      00050106  ..\..\nos_api\lip_crt.o(lip_crt.o)
+../SUBJ/ARM_SYS/LIP_CRT/pictable.c
+               local   (ABSOLUTE) 00000000  ..\..\nos_api\lip_crt.o(pictable.o)
+$t             local   .text      00050658  ..\..\nos_api\lip_crt.o(pictable.o)
+..\SUBJ\68SYS\FUNC\libnos.s
+               local   (ABSOLUTE) 00000000  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Formate   00050160  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Formate   00050162  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   0005014c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   0005014e  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050148  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   0005014a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050140  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   00050142  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050154  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   00050156  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050158  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   0005015a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   0005015c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   0005015e  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050144  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   00050146  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Uart_In   00050188  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Uart_In   0005018a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Kb_Read   00050164  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Kb_Read   00050166  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Mte_Wai   00050168  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Mte_Wai   0005016a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Printer   00050178  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Printer   0005017a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Printer   00050174  ..\..\nos_api\libnos.a(libnos.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 14
+Fri Dec 31 16:08:11 1999
+
+$d             local   .Printer   00050176  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Printer   00050170  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Printer   00050172  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   0005012c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   0005012e  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   00050128  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   0005012a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   00050130  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   00050132  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   00050134  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   00050136  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Uart_Fl   00050180  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Uart_Fl   00050182  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Uart_Ge   00050184  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Uart_Ge   00050186  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Uart_Ch   0005017c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Uart_Ch   0005017e  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .memset    000501a0  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .memset    000501a2  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Display   00050150  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Display   00050152  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   0005013c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   0005013e  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .CardRdr   00050138  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .CardRdr   0005013a  ..\..\nos_api\libnos.a(libnos.o)
+$t             local   .Printer   0005016c  ..\..\nos_api\libnos.a(libnos.o)
+$d             local   .Printer   0005016e  ..\..\nos_api\libnos.a(libnos.o)
+memcpy.s       local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+return         local   .text      0005070a  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+restore_and_return
+               local   .text      00050708  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+$t             local   .text      000506c8  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+$d             local   .text      00050742  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+_zerobss.s     local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_OPEN       local   (ABSOLUTE) 00000001  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_CLOSE      local   (ABSOLUTE) 00000002  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_WRITEC     local   (ABSOLUTE) 00000003  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_WRITE0     local   (ABSOLUTE) 00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_WRITE      local   (ABSOLUTE) 00000005  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_READ       local   (ABSOLUTE) 00000006  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_READC      local   (ABSOLUTE) 00000007  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_ISERROR    local   (ABSOLUTE) 00000008  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_ISTTY      local   (ABSOLUTE) 00000009  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_SEEK       local   (ABSOLUTE) 0000000a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_ENSURE     local   (ABSOLUTE) 0000000b  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_FLEN       local   (ABSOLUTE) 0000000c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_TMPNAM     local   (ABSOLUTE) 0000000d  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_REMOVE     local   (ABSOLUTE) 0000000e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_RENAME     local   (ABSOLUTE) 0000000f  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_CLOCK      local   (ABSOLUTE) 00000010  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_TIME       local   (ABSOLUTE) 00000011  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_SYSTEM     local   (ABSOLUTE) 00000012  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_ERRNO      local   (ABSOLUTE) 00000013  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_GET_CMDLINE
+               local   (ABSOLUTE) 00000015  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_HEAPINFO   local   (ABSOLUTE) 00000016  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 15
+Fri Dec 31 16:08:11 1999
+
+SYS_SVC        local   (ABSOLUTE) 00000017  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+SYS_EXCEPTION  local   (ABSOLUTE) 00000018  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+ADP_Stopped_ApplicationExit
+               local   (ABSOLUTE) 00020026  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+$a             local   .text      00050744  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+cpp_init.s     local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_OPEN       local   (ABSOLUTE) 00000001  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_CLOSE      local   (ABSOLUTE) 00000002  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_WRITEC     local   (ABSOLUTE) 00000003  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_WRITE0     local   (ABSOLUTE) 00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_WRITE      local   (ABSOLUTE) 00000005  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_READ       local   (ABSOLUTE) 00000006  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_READC      local   (ABSOLUTE) 00000007  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_ISERROR    local   (ABSOLUTE) 00000008  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_ISTTY      local   (ABSOLUTE) 00000009  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_SEEK       local   (ABSOLUTE) 0000000a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_ENSURE     local   (ABSOLUTE) 0000000b  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_FLEN       local   (ABSOLUTE) 0000000c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_TMPNAM     local   (ABSOLUTE) 0000000d  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_REMOVE     local   (ABSOLUTE) 0000000e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_RENAME     local   (ABSOLUTE) 0000000f  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_CLOCK      local   (ABSOLUTE) 00000010  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_TIME       local   (ABSOLUTE) 00000011  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_SYSTEM     local   (ABSOLUTE) 00000012  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_ERRNO      local   (ABSOLUTE) 00000013  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_GET_CMDLINE
+               local   (ABSOLUTE) 00000015  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_HEAPINFO   local   (ABSOLUTE) 00000016  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_SVC        local   (ABSOLUTE) 00000017  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+SYS_EXCEPTION  local   (ABSOLUTE) 00000018  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+ADP_Stopped_ApplicationExit
+               local   (ABSOLUTE) 00020026  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__framesize__  local   (ABSOLUTE) 00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__regcount__   local   (ABSOLUTE) 00000001  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__regsize__    local   (ABSOLUTE) 00000004  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__stacksize__  local   (ABSOLUTE) 00000008  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+noatexit       local   .text      000507c4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+$a             local   .text      00050774  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+$a             local   .text      0005079c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+../../../../../mw/misc_g/mwdctor.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+first_call.L18 local   .sdata     00050f90  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_ctor_list local   .sdata     00050f94  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_dtor_list local   .sdata     00050f98  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_tls_ctor_list
+               local   .sdata     00050f9c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_tls_dtor_list
+               local   .sdata     00050fa0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+priority_enq   local   .text      000507d4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$$             local   .text      00050900  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+called.L16     local   .sdata     00050fa4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$t             local   .text      000507d4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      00050838  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      0005084e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      0005086e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      00050884  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 16
+Fri Dec 31 16:08:11 1999
+
+$b             local   .text      000508a2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      000508c4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      000508ea  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      00050904  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$b             local   .text      0005092c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+$d             local   .text      0005093c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+../../../../../mw/std_g/atexit.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+_atexit_list   local   C$$zidat   00051010  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+_atexit_count  local   .sdata     00050fa8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+_atexit_lock   local   .sbss      00050fb4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+__mod_I__mwstdgatexitc0_______________mw_stdg_atexit_c_121
+               local   .text      000509e8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$$             local   .text      00050978  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+doexit         local   .text      000509a6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+init_atexit_lock
+               local   .text      000509d2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$t             local   .text      00050940  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      00050950  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      00050964  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      00050998  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      000509c4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      000509de  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$b             local   .text      000509ec  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$d             local   .text      000509f6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$a             local   .init      0005018c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$d             local   .init      00050190  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+$a             local   .init      00050194  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+../../../../../mw/std_g/initcopy.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$$             local   .text      00050a72  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$$             local   .text      00050b6c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$t             local   .text      000509fc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050a0c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050a64  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050aca  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050ae4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050af8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050b58  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050b8e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050bb2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$b             local   .text      00050bc6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+$d             local   .text      00050bd4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+callvia.s      local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+$t             local   .text      00050bdc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+$d             local   .text      00050bee  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+../../../../../mw/misc_g/mutexg.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+$t             local   .text      00050bf0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+../../../../../mw/std_g/_cleanup.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+$t             local   .text      00050bf8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+$b             local   .text      00050c08  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+$b             local   .text      00050c1e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+$b             local   .text      00050c38  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+$b             local   .text      00050c4e  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 17
+Fri Dec 31 16:08:11 1999
+
+$d             local   .text      00050c5a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+../../../../../mw/fio_g/_fclosfp.c
+               local   (ABSOLUTE) 00000000  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o)
+$t             local   .thunks    00050c5c  <Linker Defined>
+$a             local   .thunks    00050c60  <Linker Defined>
+__cpp_initialize$T
+               local   .thunks    00050c5c  <Linker Defined>
+$t             local   .thunks    00050c64  <Linker Defined>
+$a             local   .thunks    00050c68  <Linker Defined>
+_zerobss$T     local   .thunks    00050c64  <Linker Defined>
+$a             local   .thunks    00050c6c  <Linker Defined>
+$d             local   .thunks    00050c78  <Linker Defined>
+__mw_cpp_init$A
+               local   .thunks    00050c6c  <Linker Defined>
+$a             local   .thunks    00050c7c  <Linker Defined>
+$d             local   .thunks    00050c88  <Linker Defined>
+atexit$A       local   .thunks    00050c7c  <Linker Defined>
+$a             local   .thunks    00050c8c  <Linker Defined>
+$d             local   .thunks    00050c98  <Linker Defined>
+__mw_register_ctor$A
+               local   .thunks    00050c8c  <Linker Defined>
+genjitsu_print global  .text      000501a4  release\obj\demo.o
+card_reader    global  .text      00050354  release\obj\demo.o
+calculator     global  .text      00050544  release\obj\demo.o
+raw_reader     global  .text      00050554  release\obj\demo.o
+main           global  .text      000505f8  release\obj\demo.o
+BaseDlmIndex   global  .base_in   00050cb0  ..\..\nos_api\lip_crt.o(lip_crt.o)
+BaseDlmEntry   global  .base_en   00050c9c  ..\..\nos_api\lip_crt.o(lip_crt.o)
+DlmUserID      global  .base_in   00050cb4  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_start         global  .text      00050080  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_init_pic      global  .text      0005009e  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_stkinit       global  .text      0005009c  ..\..\nos_api\lip_crt.o(lip_crt.o)
+__relocate_from_pictable
+               global  .text      00050658  ..\..\nos_api\lip_crt.o(pictable.o)
+Formater_GoMenu
+               global  .Formate   00050160  ..\..\nos_api\libnos.a(libnos.o)
+Display_PopUp  global  .Display   0005014c  ..\..\nos_api\libnos.a(libnos.o)
+Display_PopDown
+               global  .Display   00050148  ..\..\nos_api\libnos.a(libnos.o)
+Display_Cls    global  .Display   00050140  ..\..\nos_api\libnos.a(libnos.o)
+Display_UpDisplay
+               global  .Display   00050154  ..\..\nos_api\libnos.a(libnos.o)
+Display_Write  global  .Display   00050158  ..\..\nos_api\libnos.a(libnos.o)
+Display_WriteStr
+               global  .Display   0005015c  ..\..\nos_api\libnos.a(libnos.o)
+Display_OnOff  global  .Display   00050144  ..\..\nos_api\libnos.a(libnos.o)
+Uart_Init      global  .Uart_In   00050188  ..\..\nos_api\libnos.a(libnos.o)
+Kb_Read        global  .Kb_Read   00050164  ..\..\nos_api\libnos.a(libnos.o)
+Mte_Wait       global  .Mte_Wai   00050168  ..\..\nos_api\libnos.a(libnos.o)
+Printer_WriteStr
+               global  .Printer   00050178  ..\..\nos_api\libnos.a(libnos.o)
+Printer_Write  global  .Printer   00050174  ..\..\nos_api\libnos.a(libnos.o)
+Printer_GetStatus
+               global  .Printer   00050170  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_Enable global  .CardRdr   0005012c  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_Disable
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 18
+Fri Dec 31 16:08:11 1999
+
+               global  .CardRdr   00050128  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_GetTrack1
+               global  .CardRdr   00050130  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_GetTrack2
+               global  .CardRdr   00050134  ..\..\nos_api\libnos.a(libnos.o)
+Uart_Flush     global  .Uart_Fl   00050180  ..\..\nos_api\libnos.a(libnos.o)
+Uart_GetBuf    global  .Uart_Ge   00050184  ..\..\nos_api\libnos.a(libnos.o)
+Uart_CheckBuf  global  .Uart_Ch   0005017c  ..\..\nos_api\libnos.a(libnos.o)
+memset         global  .memset    000501a0  ..\..\nos_api\libnos.a(libnos.o)
+Display_SetFont
+               global  .Display   00050150  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_SetBeepTime
+               global  .CardRdr   0005013c  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_IsAnyTrackCompleted
+               global  .CardRdr   00050138  ..\..\nos_api\libnos.a(libnos.o)
+Printer_AdjustPaper
+               global  .Printer   0005016c  ..\..\nos_api\libnos.a(libnos.o)
+memcpy         global  .text      000506c8  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+_zerobss       global  .text      00050744  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+_mw_initialize global  .text      0005079c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__cpp_initialize
+               global  .text      00050774  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__cpp_init     global  .text      0005079c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__mw_register_ctor
+               global  .text      00050824  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_register_dtor
+               global  .text      0005085a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_run_tls_ctor
+               global  .text      00050890  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_run_tls_dtor
+               global  .text      000508b2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_cpp_init  global  .text      000508d4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_cpp_exit  global  .text      0005090c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+atexit         global  .text      00050940  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+_initdatCopy   global  .text      000509fc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initcopy_pic  global  .text      00050a1a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initcopy_exit global  .text      00050bd2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initcopy      global  .text      00050b04  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+__call_via_r0  global  .text      00050bdc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r1  global  .text      00050bde  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r2  global  .text      00050be0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r3  global  .text      00050be2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r4  global  .text      00050be4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r5  global  .text      00050be6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r6  global  .text      00050be8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r7  global  .text      00050bea  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_ip  global  .text      00050bec  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+_mwmutex_create
+               weak    .text      00050bf0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_delete
+               weak    .text      00050bf2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_lock  weak    .text      00050bf4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_unlock
+               weak    .text      00050bf6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_exitv         global  .sdata     00050fac  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+__cleanup      global  .text      00050bf8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 19
+Fri Dec 31 16:08:11 1999
+
+_cexit         global  .text      00050c28  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+_c_exit        global  .text      00050c58  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+_fclose_exit_p global  .sdata     00050fb0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o)
+RW_data_Base   global  .sdatai    00050f20  linker.cmd
+__PICTABLE__   global  .pictabl   00050de4  <Linker Defined>
+_0             weak    (UNDEFINED)          release\obj\applhead.o
+static_data_size
+               global  (ABSOLUTE) 00000180  linker.cmd
+_epictable     global  .pictabl   00050ee8  release\demo.elf
+_initdat       global  .initdat   00050cd4  <Linker Defined>
+_einitdat      global  .initdat   00050de4  release\demo.elf
+__DATA__       global  .sdatai    00050f20  release\demo.elf
+__DATASIZE__   global  (ABSOLUTE) 00000180  release\demo.elf
+__TEXT__       global  .rodata1   00050040  release\demo.elf
+__TEXTSIZE__   global  (ABSOLUTE) 00000ede  release\demo.elf
+_estack        weak    (UNDEFINED)          ..\..\nos_api\lip_crt.o(lip_crt.o)
+Image$$RO$$Base
+               global  .rodata1   00050040  <linker defined>
+sb$$interLUdata$$Base
+               global  .sdatai    00050f20  <linker defined>
+Image$$RW$$Base
+               global  .sdatai    00050f20  <linker defined>
+_fsbss         global  .sbss      00050fb4  release\demo.elf
+_esbss         global  .sbss      00050fb8  release\demo.elf
+Image$$ZI$$Base
+               global  C$$zidat   00051010  <linker defined>
+Image$$ZI$$Limit
+               global  C$$zidat   000510a0  <linker defined>
+_init          weak    (UNDEFINED)          D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+_fini          weak    (UNDEFINED)          D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+_SDA_BASE_     global  .sdatai    00050f20  <linker defined>
+
+GLOBAL SYMBOLS SUMMARY (sorted by name)
+_______________
+
+SYMBOL         BINDING SECTION   VALUE     MODULE
+
+BaseDlmEntry   global  .base_en   00050c9c  ..\..\nos_api\lip_crt.o(lip_crt.o)
+BaseDlmIndex   global  .base_in   00050cb0  ..\..\nos_api\lip_crt.o(lip_crt.o)
+CardRdr_Disable
+               global  .CardRdr   00050128  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_Enable global  .CardRdr   0005012c  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_GetTrack1
+               global  .CardRdr   00050130  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_GetTrack2
+               global  .CardRdr   00050134  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_IsAnyTrackCompleted
+               global  .CardRdr   00050138  ..\..\nos_api\libnos.a(libnos.o)
+CardRdr_SetBeepTime
+               global  .CardRdr   0005013c  ..\..\nos_api\libnos.a(libnos.o)
+Display_Cls    global  .Display   00050140  ..\..\nos_api\libnos.a(libnos.o)
+Display_OnOff  global  .Display   00050144  ..\..\nos_api\libnos.a(libnos.o)
+Display_PopDown
+               global  .Display   00050148  ..\..\nos_api\libnos.a(libnos.o)
+Display_PopUp  global  .Display   0005014c  ..\..\nos_api\libnos.a(libnos.o)
+Display_SetFont
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 20
+Fri Dec 31 16:08:11 1999
+
+               global  .Display   00050150  ..\..\nos_api\libnos.a(libnos.o)
+Display_UpDisplay
+               global  .Display   00050154  ..\..\nos_api\libnos.a(libnos.o)
+Display_Write  global  .Display   00050158  ..\..\nos_api\libnos.a(libnos.o)
+Display_WriteStr
+               global  .Display   0005015c  ..\..\nos_api\libnos.a(libnos.o)
+DlmUserID      global  .base_in   00050cb4  ..\..\nos_api\lip_crt.o(lip_crt.o)
+Formater_GoMenu
+               global  .Formate   00050160  ..\..\nos_api\libnos.a(libnos.o)
+Image$$RO$$Base
+               global  .rodata1   00050040  <linker defined>
+Image$$RW$$Base
+               global  .sdatai    00050f20  <linker defined>
+Image$$ZI$$Base
+               global  C$$zidat   00051010  <linker defined>
+Image$$ZI$$Limit
+               global  C$$zidat   000510a0  <linker defined>
+Kb_Read        global  .Kb_Read   00050164  ..\..\nos_api\libnos.a(libnos.o)
+Mte_Wait       global  .Mte_Wai   00050168  ..\..\nos_api\libnos.a(libnos.o)
+Printer_AdjustPaper
+               global  .Printer   0005016c  ..\..\nos_api\libnos.a(libnos.o)
+Printer_GetStatus
+               global  .Printer   00050170  ..\..\nos_api\libnos.a(libnos.o)
+Printer_Write  global  .Printer   00050174  ..\..\nos_api\libnos.a(libnos.o)
+Printer_WriteStr
+               global  .Printer   00050178  ..\..\nos_api\libnos.a(libnos.o)
+RW_data_Base   global  .sdatai    00050f20  linker.cmd
+Uart_CheckBuf  global  .Uart_Ch   0005017c  ..\..\nos_api\libnos.a(libnos.o)
+Uart_Flush     global  .Uart_Fl   00050180  ..\..\nos_api\libnos.a(libnos.o)
+Uart_GetBuf    global  .Uart_Ge   00050184  ..\..\nos_api\libnos.a(libnos.o)
+Uart_Init      global  .Uart_In   00050188  ..\..\nos_api\libnos.a(libnos.o)
+_0             weak    (UNDEFINED)          release\obj\applhead.o
+_SDA_BASE_     global  .sdatai    00050f20  <linker defined>
+__DATASIZE__   global  (ABSOLUTE) 00000180  release\demo.elf
+__DATA__       global  .sdatai    00050f20  release\demo.elf
+__PICTABLE__   global  .pictabl   00050de4  <Linker Defined>
+__TEXTSIZE__   global  (ABSOLUTE) 00000ede  release\demo.elf
+__TEXT__       global  .rodata1   00050040  release\demo.elf
+__call_via_ip  global  .text      00050bec  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r0  global  .text      00050bdc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r1  global  .text      00050bde  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r2  global  .text      00050be0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r3  global  .text      00050be2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r4  global  .text      00050be4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r5  global  .text      00050be6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r6  global  .text      00050be8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__call_via_r7  global  .text      00050bea  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(callvia.o)
+__cleanup      global  .text      00050bf8  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+__cpp_init     global  .text      0005079c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__cpp_initialize
+               global  .text      00050774  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+__mw_cpp_exit  global  .text      0005090c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_cpp_init  global  .text      000508d4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_register_ctor
+               global  .text      00050824  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_register_dtor
+MetaWare Universal Linker 5.1u [ELF/ARM]
+(c)Copyright 1995-2002, MetaWare Incorporated			Page 21
+Fri Dec 31 16:08:11 1999
+
+               global  .text      0005085a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_run_tls_ctor
+               global  .text      00050890  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__mw_run_tls_dtor
+               global  .text      000508b2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mwdctor.o)
+__relocate_from_pictable
+               global  .text      00050658  ..\..\nos_api\lip_crt.o(pictable.o)
+_c_exit        global  .text      00050c58  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+_cexit         global  .text      00050c28  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+_einitdat      global  .initdat   00050de4  release\demo.elf
+_epictable     global  .pictabl   00050ee8  release\demo.elf
+_esbss         global  .sbss      00050fb8  release\demo.elf
+_estack        weak    (UNDEFINED)          ..\..\nos_api\lip_crt.o(lip_crt.o)
+_exitv         global  .sdata     00050fac  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_cleanup.o)
+_fclose_exit_p global  .sdata     00050fb0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_fclosfp.o)
+_fini          weak    (UNDEFINED)          D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+_fsbss         global  .sbss      00050fb4  release\demo.elf
+_init          weak    (UNDEFINED)          D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+_init_pic      global  .text      0005009e  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_initcopy      global  .text      00050b04  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initcopy_exit global  .text      00050bd2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initcopy_pic  global  .text      00050a1a  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_initdat       global  .initdat   00050cd4  <Linker Defined>
+_initdatCopy   global  .text      000509fc  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(initcopy.o)
+_mw_initialize global  .text      0005079c  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(cpp_init.o)
+_mwmutex_create
+               weak    .text      00050bf0  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_delete
+               weak    .text      00050bf2  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_lock  weak    .text      00050bf4  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_mwmutex_unlock
+               weak    .text      00050bf6  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(mutexg.o)
+_start         global  .text      00050080  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_stkinit       global  .text      0005009c  ..\..\nos_api\lip_crt.o(lip_crt.o)
+_zerobss       global  .text      00050744  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(_zerobss.o)
+atexit         global  .text      00050940  D:\HCARM\LIB\BE\THUMB\PIC\LIBMW.A(atexit.o)
+calculator     global  .text      00050544  release\obj\demo.o
+card_reader    global  .text      00050354  release\obj\demo.o
+genjitsu_print global  .text      000501a4  release\obj\demo.o
+main           global  .text      000505f8  release\obj\demo.o
+memcpy         global  .text      000506c8  D:\HCARM\LIB\BE\THUMB\PIC\LIBC.A(memcpy.o)
+memset         global  .memset    000501a0  ..\..\nos_api\libnos.a(libnos.o)
+raw_reader     global  .text      00050554  release\obj\demo.o
+sb$$interLUdata$$Base
+               global  .sdatai    00050f20  <linker defined>
+static_data_size
+               global  (ABSOLUTE) 00000180  linker.cmd
+
+
+START ADDRESS:	00050080
